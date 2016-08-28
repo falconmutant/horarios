@@ -8,7 +8,7 @@
         <meta content="width=device-width, initial-scale=1" name="viewport" />
         <meta content="" name="description" />
         <meta content="" name="author" />
-        <link rel="shortcut icon" href="favicon.ico" /> 
+        <link rel="shortcut icon" href="favicon.ico" />
         <link href="//fonts.googleapis.com/css?family=Oswald:400,300,700" rel="stylesheet" type="text/css" />
         <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=all" rel="stylesheet" type="text/css" />
         <link href=" {% static "core/css/font-awesome.min.css" %}" rel="stylesheet" type="text/css" />
@@ -29,7 +29,7 @@
         <link href=" {% static "core/css/responsive.bootstrap.min.css" %}" rel="stylesheet">
         {% block css %}
         {% endblock %}
-        
+
     </head>
     <!-- END HEAD -->
 
@@ -211,7 +211,7 @@
             <!-- END HEADER -->
             <div class="container-fluid">
                 <div style="padding-top:20px !important;" class="page-content">
-                  {% block header %}
+                  {% block content %}
                   {% endblock %}
                 </div>
                 <!-- BEGIN FOOTER -->
@@ -222,7 +222,7 @@
                 <!-- END FOOTER -->
             </div>
         </div>
-        <!-- END CONTAINER --> 
+        <!-- END CONTAINER -->
         {% block modal %}
         {% endblock %}
         <script type="text/javascript" src="//code.jquery.com/jquery-1.12.3.js"></script>
