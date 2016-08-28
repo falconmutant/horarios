@@ -5,27 +5,42 @@
 {% block aula %}
   active open selected
 {% endblock aula %}
+{% block css%}
+<style type="text/css">
+  .a-details,.a-details:hover{
+    float: right;
+    border-radius: 6px !important;
+  }
+  .table td {
+    text-align: center;   
+  }
+</style>
+{% endblock css %}
 {% block header %}
-<table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered datatables" id="tabletools">
-    <thead>
-    	<tr>
-              <th>Aula</th>
-              <th>Modificar</th>
-              <th>Eliminar</th>
-              <th>Disponibilidad</th>
-              <th>Materia</th>
-              <th>Software</th>
-        </tr>
-    </thead>
-    <tbody id="tb">
-    	<tr>
-    		<td></td>
-    		<td></td>
-    		<td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-    	</tr>
-    </tbody>
+  <a class="btn btn-primary btn-lg a-details" role="button" href="/registro/">Registrar Aula</a>
+  <br>
+  <br>
+<hr>
+<table id="tabletools" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
+  <thead>
+  	<tr>
+      <th>Aula</th>
+      <th>Modificar</th>
+      <th>Eliminar</th>
+      <th>Disponibilidad</th>
+      <th>Materia</th>
+      <th>Software</th>
+    </tr>
+  </thead>
+  <tbody id="tb">
+  	<tr>
+  		<td>LITI 2</td>
+  		<td><a href=""><i class="fa fa-book" aria-hidden="true"></i></a></td>
+  		<td><a href=""><i class="fa fa-trash" aria-hidden="true"></i></a></td>
+      <td><a href=""><i class="fa fa-cubes" aria-hidden="true"></i></a></td>
+      <td><a href=""><i class="fa fa-tasks" aria-hidden="true"></i></a></td>
+      <td><a href=""><i class="fa fa-cubes" aria-hidden="true"></i></a></td>
+  	</tr>
+  </tbody>
 </table>
 {% endblock header %}
