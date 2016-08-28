@@ -79,8 +79,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'horarios',
-        'USER': 'root',
-        'PASSWORD': 'rpina0109',
+        'USER': 'horarios',
+        'PASSWORD': 'Horarios00!',
         'HOST': '127.0.0.1',
         'PORT': '',
     }
