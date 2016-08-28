@@ -1,1 +1,7 @@
 ##THIS IS A README FILE 
+
+#VERSIONS FOR THIS PROJECT :
+
+Python 3.5
+
+Django 1.10
