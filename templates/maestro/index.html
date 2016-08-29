@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% block title %}
+  Modulo maestro
+{% endblock title %}
+{% block maestro %}
+  active open selected
+{% endblock maestro %}
+{% block css %}
+<style type="text/css">
+  .a-details,.a-details:hover{
+    float: right;
+    border-radius: 6px !important;
+  }
+  .table td {
+    text-align: center;
+  }
+</style>
+{% endblock css %}
+{% block content %}
+<a class="btn btn-primary btn-lg a-details" role="button" href="/registro/">Registrar Maestro</a>
+<br>
+<br>
+<hr>
+<table id="tabletools" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
+<thead>
+  <tr>
+    <th>Nombre</th>
+    <th>Apellido Paterno</th>
+    <th>Apellido Materno</th>
+    <th>Contrato</th>
+    <th>Proyecto financiado</th>
+    <th>Grado de estudio</th>
+    <th>Clase maestria</th>
+    <th>Número de materias</th>
+  </tr>
+</thead>
+<tfoot>
+  <tr>
+    <th>Nombre</th>
+    <th>Apellido Paterno</th>
+    <th>Apellido Materno</th>
+    <th>Contrato</th>
+    <th>Proyecto financiado</th>
+    <th>Grado de estudio</th>
+    <th>Clase maestria</th>
+    <th>Número de materias</th>
+  </tr>
+</tfoot>
+<tbody id="tb">
+</tbody>
+</table>
+{% endblock content %}
+{% load static %}
+{% block javascript %}
+<script type="text/javascript" src="{% static "js/views/maestro/index.js" %}"></script>
+{% endblock javascript %}
