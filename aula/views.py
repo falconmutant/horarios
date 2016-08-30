@@ -31,7 +31,7 @@ def myajaxview(request):
 	for nombre in aulas:
 		response_data = {}
 		response_data['Aula'] = nombre.Nombre
-		response_data['Modificar'] = '<a href=""><i class="fa fa-book" aria-hidden="true"></i></a>'
+		response_data['Modificar'] = '<a href="" data-toggle="modal" data-target="#modificar"><i class="fa fa-book" aria-hidden="true"></i></a>'
 		response_data['Eliminar'] = '<a href=""><i class="fa fa-trash" aria-hidden="true"></i></a>'
 		response_data['Disponibilidad'] = '<a href=""><i class="fa fa-cubes" aria-hidden="true"></i></a>'
 		response_data['Materia'] = '<a href=""><i class="fa fa-tasks" aria-hidden="true"></i></a>'
