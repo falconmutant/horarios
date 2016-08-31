@@ -1,4 +1,6 @@
 from django.db import models
+from materia.models import Materia
+from modulos.models import Disponibilidad
 
 class Maestro(models.Model):
   Nombre = models.CharField(max_length=50)
@@ -9,3 +11,11 @@ class Maestro(models.Model):
   Grado_De_Estudio = models.CharField(max_length=50)
   Clase_Maestria = models.CharField(max_length=2)
   Num_Materias = models.SmallIntegerField()
+
+class Maestro_Materia(models.Model):
+  Id_Materia = models.ForeignKey(Materia)
+  Id_Maestro = models.ForeignKey(Maestro)
+
+class Maestro_Disponibilidad(models.Model):
+  Id_Maestro = models.ForeignKey(Maestro)
+  Id_Disponibilidad = models.ForeignKey(Disponibilidad)
