@@ -3,9 +3,9 @@ from materia.models import Materia
 from modulos.models import Disponibilidad
 
 CONTRATO = (
-('PA', 'PA'),
-('PTC', 'PTC'),
-('DC', 'Director de Carrera'),
+  ('PA', 'PA'),
+  ('PTC', 'PTC'),
+  ('DC', 'Director de Carrera'),
 )
 
 class Maestro(models.Model):
@@ -22,6 +22,6 @@ class Maestro_Materia(models.Model):
   Id_Materia = models.ForeignKey(Materia)
   Id_Maestro = models.ForeignKey(Maestro)
 
- class Maestro_Disponibilidad(models.Model):
+class Maestro_Disponibilidad(models.Model):
   Id_Maestro = models.ForeignKey(Maestro)
   Id_Disponibilidad = models.ForeignKey(Disponibilidad)
