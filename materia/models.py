@@ -1,3 +1,7 @@
 from django.db import models
+from modulos.models import Cuatrimestre
 
-# Create your models here.
+class Materia(models.Model):
+  Nombre = models.CharField(max_length=70)
+  Horas_Por_Semana = models.SmallIntegerField()
+  Id_Cuatrimestre = models.ForeignKey(Cuatrimestre)
