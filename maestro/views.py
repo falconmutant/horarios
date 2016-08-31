@@ -16,14 +16,12 @@ def datatable(request):
   maestros = Maestro.objects.all()
   for maestro in maestros:
     response_data = {}
-    response_data['Nombre'] = maestro.Nombre
-    response_data['Apellido_Paterno'] = maestro.Apellido_Paterno
-    response_data['Apellido_Materno'] = maestro.Apellido_Materno
-    response_data['Contrato'] = maestro.Contrato
-    response_data['Proyecto_Financiado'] = maestro.Proyecto_Financiado
-    response_data['Grado_De_Estudio'] = maestro.Grado_De_Estudio
-    response_data['Clase_Maestria'] = maestro.Clase_Maestria
-    response_data['Num_Materias'] = maestro.Num_Materias
+    response_data['Nombre'] = maestro.Nombre+" "+maestro.Apellido_Paterno+" "+maestro.Apellido_Materno
+    response_data['Modificar'] = '<a href=""><i class="fa fa-book" aria-hidden="true"></i></a>'
+    response_data['Eliminar'] = '<a href=""><i class="fa fa-trash" aria-hidden="true"></i></a>'
+    response_data['Disponibilidad'] = '<a href=""><i class="fa fa-cubes" aria-hidden="true"></i></a>'
+    response_data['Materia'] = '<a href=""><i class="fa fa-tasks" aria-hidden="true"></i></a>'
+    response_data['Software'] = '<a href=""><i class="fa fa-cubes" aria-hidden="true"></i></a>'
     report.append(response_data)
   data = json.dumps(report)
   return HttpResponse(data, content_type='application/json')
