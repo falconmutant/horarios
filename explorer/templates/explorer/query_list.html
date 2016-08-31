@@ -1,15 +1,14 @@
-{% extends "explorer/base.html" %}
+{% extends "base.html" %}
 {% load staticfiles %}
 
-{% block sql_explorer_navlinks %}
+{% block content %}
     {% if can_change %}
-      <li><a href="{% url "query_create" %}">New Query</a></li>
-      <li><a href="{% url "explorer_playground" %}">Playground</a></li>
-      <li><a href="{% url "explorer_logs" %}">Logs</a></li>
+            <li><a href="{% url "query_create" %}">New Query</a></li>
+            <li><a href="{% url "explorer_playground" %}">Playground</a></li>
+            <li><a href="{% url "explorer_logs" %}">Logs</a></li>
+      
     {% endif %}
-{% endblock %}
 
-{% block sql_explorer_content %}
     {% if recent_queries|length > 0 %}
         <h3>{{ recent_queries|length }} Most Recently Used</h3>
         <table class="table table-striped">
@@ -103,9 +102,9 @@
         </tbody>
     </table>
     </div>
-{% endblock %}
+{% endblock content %}
 
-{% block sql_explorer_scripts %}
+{% block javascript %}
     <script>
     $(function() {
         function SearchFocus() {
@@ -120,4 +119,4 @@
 
 </script>
 <script src="{% static 'explorer/query-list.js' %}"></script>
-{% endblock %}
+{% endblock javascript %}
