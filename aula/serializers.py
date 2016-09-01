@@ -4,4 +4,4 @@ from aula.models import Aula
 class AulaSerializer(serializers.ModelSerializer):
   class Meta:
     model = Aula
-    fields = ('Nombre','Capacidad')
+    fields = ('id','Nombre','Capacidad', 'Id_Tipo_de_aula', 'Id_Planta_Edificio')
