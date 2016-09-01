@@ -14,6 +14,7 @@ urlpatterns = [
   url(r'^planta/$', views.PlantaList.as_view()),
   url(r'^planta/(?P<pk>[0-9]+)/$', views.PlantaDetail.as_view()),
   url(r'^edificio/$', views.EdificioList.as_view()),
+  url(r'^edificio/(?P<pk>[0-9]+)/$', views.EdificioDetail.as_view()),
   url(r'^tipoAula/$', views.Tipo_de_aulaList.as_view()),
   url(r'^dia/$', views.DiaList.as_view()),
   url(r'^hora/$', views.HoraList.as_view()),
