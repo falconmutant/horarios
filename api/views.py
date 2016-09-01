@@ -52,6 +52,31 @@ class GrupoList(APIView):
     serializer = GrupoSerializer(grupo,many = True)
     return Response(serializer.data)
 
+class GrupoDetail(APIView):
+  def get_object(self, pk):
+    try:
+      return Grupo.objects.get(pk=pk)
+    except Grupo.DoesNotExist:
+      raise Http404
+
+  def get(self, request, pk, format=None):
+    grupo = self.get_object(pk)
+    serializer = GrupoSerializer(grupo)
+    return Response(serializer.data)
+
+  def put(self, request, pk, format=None):
+    grupo = self.get_object(pk)
+    serializer = GrupoSerializer(grupo, data= request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+  def delete(self, request, pk, format=None):
+    grupo = self.get_object(pk)
+    grupo.delete()
+    return Response(status=status.HTTP_204_NO_CONTENT)
+
 class MaestroList(APIView):
   def get(self, request, format=None):
     maestro = Maestro.objects.all()
