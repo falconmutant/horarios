@@ -20,4 +20,5 @@ urlpatterns = [
   url(r'^', include('panel.urls')),
   url(r'^aula/', include('aula.urls')),
   url(r'^maestro/', include('maestro.urls')),
+  url(r'^api/',include('api.urls')),
 ]
