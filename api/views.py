@@ -176,6 +176,31 @@ class PlantaList(APIView):
     serializer = PlantaSerializer(model,many=True)
     return Response(serializer.data)
 
+class PlantaDetail(APIView):
+  def get_object(self, pk):
+    try:
+      return Planta.objects.get(pk=pk)
+    except Planta.DoesNotExist:
+      raise Http404
+
+  def get(self, request, pk, format=None):
+    planta = self.get_object(pk)
+    serializer = PlantaSerializer(planta)
+    return Response(serializer.data)
+
+  def put(self, request, pk, format=None):
+    planta = self.get_object(pk)
+    serializer = PlantaSerializer(planta, data=request.data)
+    if serializer.is_valid():
+      serializer.save()
+      return Response(serializer.data)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+  def delete(self, request, pk, format=None):
+    planta = self.get_object(pk)
+    planta.delete()
+    return Response(status=status.HTTP_204_NO_CONTENT)
+
 class EdificioList(APIView):
   def get(self, request, format=None):
     model = Edificio.objects.all()
