@@ -300,6 +300,31 @@ class HoraList(APIView):
     serializer = HoraSerializer(model,many=True)
     return Response(serializer.data)
 
+class HoraDetail(APIView):
+  def get_object(self, pk):
+    try:
+      return Hora.objects.get(pk=pk)
+    except Hora.DoesNotExist:
+      raise Http404
+
+  def get(self, request, pk, format=None):
+    hora = self.get_object(pk)
+    serializer = HoraSerializer(hora)
+    return Response(serializer.data)
+
+  def put(self, request, pk, format=None):
+    hora = self.get_object(pk)
+    serializer = HoraSerializer(hora, data=request.data)
+    if serializer.is_valid():
+      serializer.save()
+      return Response(serializer.data)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+  def delete(self, request, pk, format=None):
+    hora = self.get_object(pk)
+    hora.delete()
+    return Response(status=status.HTTP_204_NO_CONTENT)
+
 class CarreraList(APIView):
   def get(self, request, format=None):
     model = Carrera.objects.all()

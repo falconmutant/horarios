@@ -20,6 +20,7 @@ urlpatterns = [
   url(r'^dia/$', views.DiaList.as_view()),
   url(r'^dia/(?P<pk>[0-9]+)/$', views.DiaDetail.as_view()),
   url(r'^hora/$', views.HoraList.as_view()),
+  url(r'^hora/(?P<pk>[0-9]+)/$', views.HoraDetail.as_view()),
   url(r'^carrera/$', views.CarreraList.as_view()),
   url(r'^turno/$', views.TurnoList.as_view()),
   url(r'^cuatrimestre/$', views.CuatrimestreList.as_view()),
