@@ -44,7 +44,8 @@ INSTALLED_APPS = [
     'maestro',
     'materia',
     'modulos',
-    'api'
+    'api',
+    'explorer',
 ]
 
 MIDDLEWARE = [
