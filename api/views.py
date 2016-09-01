@@ -238,6 +238,31 @@ class Tipo_de_aulaList(APIView):
     serializer = Tipo_de_aulaSerializer(model,many=True)
     return Response(serializer.data)
 
+class Tipo_de_aulaDetail(APIView):
+  def get_object(self, pk):
+    try:
+      return Tipo_de_aula.objects.get(pk=pk)
+    except Tipo_de_aula.DoesNotExist:
+      raise Http404
+
+  def get(self, request, pk, format=None):
+    tipo_de_aula = self.get_object(pk)
+    serializer = Tipo_de_aulaSerializer(tipo_de_aula)
+    return Response(serializer.data)
+
+  def put(self, request, pk, format=None):
+    tipo_de_aula = self.get_object(pk)
+    serializer = Tipo_de_aulaSerializer(tipo_de_aula, data=request.data)
+    if serializer.is_valid():
+      serializer.save()
+      return Response(serializer.data)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+  def delete(self, request, pk, format=None):
+    tipo_de_aula = self.get_object(pk)
+    tipo_de_aula.delete()
+    return Response(status=status.HTTP_204_NO_CONTENT)
+
 class DiaList(APIView):
   def get(self, request, format=None):
     model = Dia.objects.all()

@@ -16,6 +16,7 @@ urlpatterns = [
   url(r'^edificio/$', views.EdificioList.as_view()),
   url(r'^edificio/(?P<pk>[0-9]+)/$', views.EdificioDetail.as_view()),
   url(r'^tipoAula/$', views.Tipo_de_aulaList.as_view()),
+  url(r'^tipoAula/(?P<pk>[0-9]+)/$', views.Tipo_de_aulaDetail.as_view()),
   url(r'^dia/$', views.DiaList.as_view()),
   url(r'^hora/$', views.HoraList.as_view()),
   url(r'^carrera/$', views.CarreraList.as_view()),
