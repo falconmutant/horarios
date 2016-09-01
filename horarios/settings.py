@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'maestro',
     'materia',
     'modulos',
+    'api',
     'explorer',
 ]
 
