@@ -4,4 +4,4 @@ from .models import Grupo
 class GrupoSerializer(serializers.ModelSerializer):
   class Meta:
     model = Grupo
-    fields = ('Nombre', 'Tipo_Grupo')
+    fields = ('id','Nombre', 'Tipo_Grupo','Id_Turno')
