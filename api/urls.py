@@ -10,6 +10,7 @@ urlpatterns = [
   url(r'^materia/$', views.MateriaList.as_view()),
   url(r'^materia/(?P<pk>[0-9]+)/$', views.MateriaDetail.as_view()),
   url(r'^software/$', views.SoftwareList.as_view()),
+  url(r'^software/(?P<pk>[0-9]+)/$', views.SoftwareDetail.as_view()),
   url(r'^planta/$', views.PlantaList.as_view()),
   url(r'^edificio/$', views.EdificioList.as_view()),
   url(r'^tipoAula/$', views.Tipo_de_aulaList.as_view()),
