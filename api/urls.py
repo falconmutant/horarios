@@ -4,6 +4,7 @@ urlpatterns = [
   url(r'^aula/$', views.AulaList.as_view()),
   url(r'^aula/(?P<pk>[0-9]+)/$', views.AulaDetail.as_view()),
   url(r'^aula_disponibilidad/$', views.Aula_Disponibilidad_List.as_view()),
+  url(r'^aula_disponibilidad/(?P<pk>[0-9]+)/$', views.Aula_Disponibilidad_Detail.as_view()),
   url(r'^grupo/$', views.GrupoList.as_view()),
   url(r'^grupo/(?P<pk>[0-9]+)/$', views.GrupoDetail.as_view()),
   url(r'^maestro/$', views.MaestroList.as_view()),
