@@ -20,6 +20,37 @@ class AulaList(APIView):
     aula = Aula.objects.all()
     serializer = AulaSerializer(aula,many = True)
     return Response(serializer.data)
+  def post(self, request, format=None):
+    serializer = AulaSerializer(data=request.data)
+    if serializer.is_valid():
+      serializer.save()
+      return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class AulaDetail(APIView):
+  def get_object(self,pk):
+    try:
+      return Aula.objects.get(pk=pk)
+    except Aula.DoesNotExist:
+      raise Http404
+
+  def get(self, request, pk, format=None):
+    aula = self.get_object(pk)
+    serializer = AulaSerializer(aula)
+    return Response(serializer.data)
+
+  def put(self, request, pk, format=None):
+    aula = self.get_object(pk)
+    serializer = AulaSerializer(aula, data=request.data)
+    if serializer.is_valid():
+      serializer.save()
+      return Response(serializer.data)
+    return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
+
+  def delete(self, request, pk, format=None):
+    aula = self.get_object(pk)
+    aula.delete()
+    return Response(status=status.HTTP_204_NO_CONTENT)
 
 class GrupoList(APIView):
   def get(self, request, format=None):
@@ -27,11 +58,74 @@ class GrupoList(APIView):
     serializer = GrupoSerializer(grupo,many = True)
     return Response(serializer.data)
 
+  def post(self, request, format=None):
+    serializer = GrupoSerializer(data=request.data)
+    if serializer.is_valid():
+      serializer.save()
+      return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class GrupoDetail(APIView):
+  def get_object(self, pk):
+    try:
+      return Grupo.objects.get(pk=pk)
+    except Grupo.DoesNotExist:
+      raise Http404
+
+  def get(self, request, pk, format=None):
+    grupo = self.get_object(pk)
+    serializer = GrupoSerializer(grupo)
+    return Response(serializer.data)
+
+  def put(self, request, pk, format=None):
+    grupo = self.get_object(pk)
+    serializer = GrupoSerializer(grupo, data= request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+  def delete(self, request, pk, format=None):
+    grupo = self.get_object(pk)
+    grupo.delete()
+    return Response(status=status.HTTP_204_NO_CONTENT)
+
 class MaestroList(APIView):
   def get(self, request, format=None):
     maestro = Maestro.objects.all()
     serializer = MaestroSerializer(maestro, many = True)
     return Response(serializer.data)
+  def post(self, request, format=None):
+    serializer = MaestroSerializer(data=request.data)
+    if serializer.is_valid():
+      serializer.save()
+      return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class MaestroDetail(APIView):
+  def get_object(self, pk):
+    try:
+      return Maestro.objects.get(pk=pk)
+    except Maestro.DoesNotExist:
+      raise Http404
+
+  def get(self, request, pk, format=None):
+    maestro = self.get_object(pk)
+    serializer = MaestroSerializer(maestro)
+    return Response(serializer.data)
+
+  def put(self, request, pk, format=None):
+    maestro = self.get_object(pk)
+    serializer = MaestroSerializer(maestro, data=request.data)
+    if serializer.is_valid():
+      serializer.save()
+      return Response(serializer.data)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+  def delete(self, request, pk, format=None):
+    maestro = self.get_object(pk)
+    maestro.delete()
+    return Response(status=status.HTTP_204_NO_CONTENT)
 
 class MateriaList(APIView):
   def get(self, request, format=None):
@@ -39,11 +133,68 @@ class MateriaList(APIView):
     serializer = MateriaSerializer(materia,many=True)
     return Response(serializer.data)
 
+  def post(self, request, format=None):
+    serializer = MateriaSerializer(data=request.data)
+    if serializer.is_valid():
+      serializer.save()
+      return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class MateriaDetail(APIView):
+  def get_object(self, pk):
+    try:
+      return Materia.objects.get(pk=pk)
+    except Materia.DoesNotExist:
+      raise Http404
+
+  def get(self, request, pk, format=None):
+    materia = self.get_object(pk)
+    serializer = MateriaSerializer(materia)
+    return Response(serializer.data)
+
+  def put(self, request, pk, format=None):
+    materia = self.get_object(pk)
+    serializer = MateriaSerializer(materia, data=request.data)
+    if serializer.is_valid():
+      serializer.save()
+      return Response(serializer.data)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+  def delete(self, request, pk, format=None):
+      materia = self.get_object(pk)
+      materia.delete()
+      return Response(status=status.HTTP_204_NO_CONTENT)
+
 class SoftwareList(APIView):
   def get(self, request, format=None):
     model = Software.objects.all()
     serializer = SoftwareSerializer(model,many=True)
     return Response(serializer.data)
+
+class SoftwareDetail(APIView):
+  def get_object(self, pk):
+    try:
+      return Software.objects.get(pk=pk)
+    except Software.DoesNotExist:
+      raise Http404
+
+  def get(self, request, pk, format=None):
+    software = self.get_object(pk)
+    serializer = SoftwareSerializer(software)
+    return Response(serializer.data)
+
+  def put(self, request, pk, format=None):
+    software = self.get_object(pk)
+    serializer = SoftwareSerializer(software, data=request.data)
+    if serializer.is_valid():
+      serializer.save()
+      return Response(serializer.data)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+  def delete(self, request, pk, format=None):
+    software = self.get_object(pk)
+    software.delete()
+    return Response(status=status.HTTP_204_NO_CONTENT)
 
 class PlantaList(APIView):
   def get(self, request, format=None):
@@ -51,11 +202,61 @@ class PlantaList(APIView):
     serializer = PlantaSerializer(model,many=True)
     return Response(serializer.data)
 
+class PlantaDetail(APIView):
+  def get_object(self, pk):
+    try:
+      return Planta.objects.get(pk=pk)
+    except Planta.DoesNotExist:
+      raise Http404
+
+  def get(self, request, pk, format=None):
+    planta = self.get_object(pk)
+    serializer = PlantaSerializer(planta)
+    return Response(serializer.data)
+
+  def put(self, request, pk, format=None):
+    planta = self.get_object(pk)
+    serializer = PlantaSerializer(planta, data=request.data)
+    if serializer.is_valid():
+      serializer.save()
+      return Response(serializer.data)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+  def delete(self, request, pk, format=None):
+    planta = self.get_object(pk)
+    planta.delete()
+    return Response(status=status.HTTP_204_NO_CONTENT)
+
 class EdificioList(APIView):
   def get(self, request, format=None):
     model = Edificio.objects.all()
     serializer = EdificioSerializer(model,many=True)
     return Response(serializer.data)
+
+class EdificioDetail(APIView):
+  def get_object(self, pk):
+    try:
+      return Edificio.objects.get(pk=pk)
+    except Edificio.DoesNotExist:
+      raise Http404
+
+  def get(self, request, pk, format=None):
+    edificio = self.get_object(pk)
+    serializer = EdificioSerializer(edificio)
+    return Response(serializer.data)
+
+  def put(self, request, pk, format=None):
+    edificio = self.get_object(pk)
+    serializer = EdificioSerializer(edificio, data=request.data)
+    if serializer.is_valid():
+      serializer.save()
+      return Response(serializer.data)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+  def delete(self, request, pk, format=None):
+    edificio = self.get_object(pk)
+    edificio.delete()
+    return Response(status=status.HTTP_204_NO_CONTENT)
 
 class Tipo_de_aulaList(APIView):
   def get(self, request, format=None):
@@ -63,11 +264,61 @@ class Tipo_de_aulaList(APIView):
     serializer = Tipo_de_aulaSerializer(model,many=True)
     return Response(serializer.data)
 
+class Tipo_de_aulaDetail(APIView):
+  def get_object(self, pk):
+    try:
+      return Tipo_de_aula.objects.get(pk=pk)
+    except Tipo_de_aula.DoesNotExist:
+      raise Http404
+
+  def get(self, request, pk, format=None):
+    tipo_de_aula = self.get_object(pk)
+    serializer = Tipo_de_aulaSerializer(tipo_de_aula)
+    return Response(serializer.data)
+
+  def put(self, request, pk, format=None):
+    tipo_de_aula = self.get_object(pk)
+    serializer = Tipo_de_aulaSerializer(tipo_de_aula, data=request.data)
+    if serializer.is_valid():
+      serializer.save()
+      return Response(serializer.data)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+  def delete(self, request, pk, format=None):
+    tipo_de_aula = self.get_object(pk)
+    tipo_de_aula.delete()
+    return Response(status=status.HTTP_204_NO_CONTENT)
+
 class DiaList(APIView):
   def get(self, request, format=None):
     model = Dia.objects.all()
     serializer = DiaSerializer(model,many=True)
     return Response(serializer.data)
+
+class DiaDetail(APIView):
+  def get_object(self, pk):
+    try:
+      return Dia.objects.get(pk=pk)
+    except Dia.DoesNotExist:
+      raise Http404
+
+  def get(self, request, pk, format=None):
+    dia = self.get_object(pk)
+    serializer = DiaSerializer(dia)
+    return Response(serializer.data)
+
+  def put(self, request, pk, format=None):
+    dia = self.get_object(pk)
+    serializer = DiaSerializer(dia, data=request.data)
+    if serializer.is_valid():
+      serializer.save()
+      return Response(serializer.data)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+  def delete(self, request, pk, format=None):
+    dia = self.get_object(pk)
+    dia.delete()
+    return Response(status=status.HTTP_204_NO_CONTENT)
 
 class HoraList(APIView):
   def get(self, request, format=None):
@@ -75,11 +326,61 @@ class HoraList(APIView):
     serializer = HoraSerializer(model,many=True)
     return Response(serializer.data)
 
+class HoraDetail(APIView):
+  def get_object(self, pk):
+    try:
+      return Hora.objects.get(pk=pk)
+    except Hora.DoesNotExist:
+      raise Http404
+
+  def get(self, request, pk, format=None):
+    hora = self.get_object(pk)
+    serializer = HoraSerializer(hora)
+    return Response(serializer.data)
+
+  def put(self, request, pk, format=None):
+    hora = self.get_object(pk)
+    serializer = HoraSerializer(hora, data=request.data)
+    if serializer.is_valid():
+      serializer.save()
+      return Response(serializer.data)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+  def delete(self, request, pk, format=None):
+    hora = self.get_object(pk)
+    hora.delete()
+    return Response(status=status.HTTP_204_NO_CONTENT)
+
 class CarreraList(APIView):
   def get(self, request, format=None):
     model = Carrera.objects.all()
     serializer = CarreraSerializer(model,many=True)
     return Response(serializer.data)
+
+class CarreraDetail(APIView):
+  def get_object(self, pk):
+    try:
+      return Carrera.objects.get(pk=pk)
+    except Carrera.DoesNotExist:
+      raise Http404
+
+  def get(self, request, pk, format=None):
+    carrera = self.get_object(pk)
+    serializer = CarreraSerializer(carrera)
+    return Response(serializer.data)
+
+  def put(self, request, pk, format=None):
+    carrera = self.get_object(pk)
+    serializer = CarreraSerializer(carrera, data=request.data)
+    if serializer.is_valid():
+      serializer.save()
+      return Response(serializer.data)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+  def delete(self, request, pk, format=None):
+    carrera = self.get_object(pk)
+    carrera.delete()
+    return Response(status=status.HTTP_204_NO_CONTENT)
 
 class TurnoList(APIView):
   def get(self, request, format=None):
@@ -87,11 +388,61 @@ class TurnoList(APIView):
     serializer = TurnoSerializer(model,many=True)
     return Response(serializer.data)
 
+class TurnoDetail(APIView):
+  def get_object(self, pk):
+    try:
+      return Turno.objects.get(pk=pk)
+    except Turno.DoesNotExist:
+      raise Http404
+
+  def get(self, request, pk, format=None):
+    turno = self.get_object(pk)
+    serializer = TurnoSerializer(turno)
+    return Response(serializer.data)
+
+  def put(self, request, pk, format=None):
+    turno = self.get_object(pk)
+    serializer = TurnoSerializer(turno, data=request.data)
+    if serializer.is_valid():
+      serializer.save()
+      return Response(serializer.data)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+  def delete(self, request, pk, format=None):
+    turno = self.get_object(pk)
+    turno.delete()
+    return Response(status=status.HTTP_204_NO_CONTENT)
+
 class CuatrimestreList(APIView):
   def get(self, request, format=None):
     model = Cuatrimestre.objects.all()
     serializer = CuatrimestreSerializer(model,many=True)
     return Response(serializer.data)
+
+class CuatrimestreDetail(APIView):
+  def get_object(self, pk):
+    try:
+      return Cuatrimestre.objects.get(pk=pk)
+    except Cuatrimestre.DoesNotExist:
+      raise Http404
+
+  def get(self, request, pk, format=None):
+    cuatrimestre = self.get_object(pk)
+    serializer = CuatrimestreSerializer(cuatrimestre)
+    return Response(serializer.data)
+
+  def put(self, request, pk, format=None):
+    cuatrimestre = self.get_object(pk)
+    serializer = CuatrimestreSerializer(cuatrimestre, data=request.data)
+    if serializer.is_valid():
+      serializer.save()
+      return Response(serializer.data)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+  def delete(self, request, pk, format=None):
+    cuatrimestre = self.get_object(pk)
+    cuatrimestre.delete()
+    return Response(status=status.HTTP_204_NO_CONTENT)
 
 class SolucionList(APIView):
   def get(self, request, format=None):
@@ -99,8 +450,27 @@ class SolucionList(APIView):
     serializer = SolucionSerializer(model,many=True)
     return Response(serializer.data)
 
-# class List(APIView):
-#   def get(self, request, format=None):
-#     model = .objects.all()
-#     serializer = Serializer(model,many=True)
-#     return Response(serializer.data)
+class SolucionDetail(APIView):
+  def get_object(self, pk):
+    try:
+      return Solucion.objects.get(pk=pk)
+    except Solucion.DoesNotExist:
+      raise Http404
+
+  def get(self, request, pk, format=None):
+    solucion = self.get_object(pk)
+    serializer = SolucionSerializer(solucion)
+    return Response(serializer.data)
+
+  def put(self, request, pk, format=None):
+    solucion = self.get_object(pk)
+    serializer = SolucionSerializer(solucion, data=request.data)
+    if serializer.is_valid():
+      serializer.save()
+      return Response(serializer.data)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+  def delete(self, request, pk, format=None):
+    solucion = self.get_object(pk)
+    solucion.delete()
+    return Response(status=status.HTTP_204_NO_CONTENT)
