@@ -393,6 +393,31 @@ class CuatrimestreList(APIView):
     serializer = CuatrimestreSerializer(model,many=True)
     return Response(serializer.data)
 
+class CuatrimestreDetail(APIView):
+  def get_object(self, pk):
+    try:
+      return Cuatrimestre.objects.get(pk=pk)
+    except Cuatrimestre.DoesNotExist:
+      raise Http404
+
+  def get(self, request, pk, format=None):
+    cuatrimestre = self.get_object(pk)
+    serializer = CuatrimestreSerializer(cuatrimestre)
+    return Response(serializer.data)
+
+  def put(self, request, pk, format=None):
+    cuatrimestre = self.get_object(pk)
+    serializer = CuatrimestreSerializer(cuatrimestre, data=request.data)
+    if serializer.is_valid():
+      serializer.save()
+      return Response(serializer.data)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+  def delete(self, request, pk, format=None):
+    cuatrimestre = self.get_object(pk)
+    cuatrimestre.delete()
+    return Response(status=status.HTTP_204_NO_CONTENT)
+
 class SolucionList(APIView):
   def get(self, request, format=None):
     model = Solucion.objects.all()
