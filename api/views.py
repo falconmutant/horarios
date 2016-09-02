@@ -74,8 +74,8 @@ class Aula_Disponibilidad_Detail(APIView):
 
   """get all disponibilidad by aula"""
   def get(self, request, pk, format=None):
-    aula_disponibilidad = Aula_Disponibilidad.objects.filter(Id_Aula=pk)
-    serializer = Aula_Disponibilidad_Serializer(aula_disponibilidad,many = True)
+    aula_disponibilidad = self.get_object(pk)
+    serializer = Aula_Disponibilidad_Serializer(aula_disponibilidad)
     return Response(serializer.data)
 
   def put(self, request, pk, format=None):
