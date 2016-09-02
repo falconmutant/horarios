@@ -88,6 +88,12 @@ class MaestroList(APIView):
     maestro = Maestro.objects.all()
     serializer = MaestroSerializer(maestro, many = True)
     return Response(serializer.data)
+  def post(self, request, format=None):
+    serializer = MaestroSerializer(data=request.data)
+    if serializer.is_valid():
+      serializer.save()
+      return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class MaestroDetail(APIView):
   def get_object(self, pk):
