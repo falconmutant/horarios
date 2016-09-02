@@ -41,6 +41,10 @@ class TurnoSerializer(serializers.ModelSerializer):
     model = Turno
     fields = ('id', 'Turno',)
 
+class DisponibilidadSerializer(serializers.ModelSerializer):
+  class Meta:
+    model = Disponibilidad
+
 class CuatrimestreSerializer(serializers.ModelSerializer):
   class Meta:
     model = Cuatrimestre
