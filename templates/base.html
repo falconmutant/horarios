@@ -87,19 +87,24 @@
                   <i class="icon-home"></i> Panel
                 </a>
                 <ul class="dropdown-menu dropdown-menu-fw">
-                  <li class="active">
-                    <a href="index.html">
+                  <li class="{% block estadisticas %}{% endblock %}">
+                    <a href="/Dashboard/">
                       <i class="icon-bar-chart"></i> Estadisticas </a>
                   </li>
-                  <li>
+                  <li class="{% block horarios %}{% endblock %}">
                     <a href="dashboard_2.html">
                       <i class="icon-bulb"></i> Crear Horario </a>
                   </li>
-                  <li>
+                  <li class="dropdown more-dropdown-sub {% block reportes %}{% endblock %}">
                     <a href="/explorer/">
                       <i class="icon-graph"></i> Reportes </a>
+                    <ul class="dropdown-menu">
+                      <li><a href="{% url "query_create" %}">Nueva Consulta</a></li>
+                      <li><a href="{% url "explorer_playground" %}">Zona de Pruebas</a></li>
+                      <li><a href="{% url "explorer_logs" %}">Registros</a></li>
+                    </ul>
                   </li>
-                  <li>
+                  <li class="{% block disponibilidad %}{% endblock %}">
                     <a href="dashboard_3.html">
                       <i class="icon-like"></i> Disponibilidad </a>
                   </li>
@@ -192,7 +197,7 @@
     </header>
     <!-- END HEADER -->
     <div class="container-fluid">
-      <div style="padding-top:20px !important;" class="page-content">
+      <div class="page-content">
         {% block content %}
         {% endblock %}
       </div>

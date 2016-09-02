@@ -1,54 +1,98 @@
-{% extends "explorer/base.html" %}
+{% extends "base.html" %}
+{% load staticfiles %}
 
-{% block sql_explorer_navlinks %}
-    {% if can_change %}
-      <li><a href="{% url "query_create" %}">New Query</a></li>
-      <li><a href="{% url "explorer_playground" %}">Playground</a></li>
-      <li class="active"><a href="">Logs</a></li>
-    {% endif %}
-{% endblock %}
+{% block title %}
+  Reportes
+{% endblock title %}
 
-{% block sql_explorer_content %}
+{% block reportes %}
+active
+{% endblock reportes %}
+
+{% block panel %}
+  active open selected
+{% endblock panel %}
+
+{% block css%}
+    <link type="text/css" href="{% static "core/css/pnotify.css" %}" rel="stylesheet">
+    <style type="text/css">
+        .a-details,.a-details:hover{
+          float: right;
+          border-radius: 6px !important;
+        }
+        .table td {
+          text-align: center;
+        }
+        .btn, .form-control{
+          border-radius: 4px !important;
+        }
+    </style>
+{% endblock css %}
+
+{% block content %}
     <h3>Recent Query Logs - Page {{ page_obj.number }}</h3>
-    <div class="table-responsive">
-        <table class="table table-striped query-list">
-            <thead>
-                <tr>
-                    <th>Run At</th>
-                    <th>Run By</th>
-                    <th>Duration</th>
-                    <th width="33%">SQL</th>
-                    <th>Query ID</th>
-                    <th>Playground</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for object in recent_logs %}
-                <tr>
-                    <td>{{ object.run_at|date:"SHORT_DATETIME_FORMAT" }}</td>
-                    <td>{{ object.run_by_user.email }}</td>
-                    <td>{{ object.duration|floatformat:2 }}ms</td>
-                    <td class="log-sql">{{ object.sql }}</td>
-                    <td> {% if object.query_id %}<a href="{% url "query_detail" object.query_id %}">Query {{ object.query_id }}</a>{% elif object.is_playground %}Playground{% else %}--{% endif %}</td>
-                    <td><a href="{% url "explorer_playground" %}?querylog_id={{ object.id }}">Open</a></td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
-    {% if is_paginated %}
-        <div class="pagination">
-            <span class="page-links">
-                {% if page_obj.has_previous %}
-                    <a href="?page={{ page_obj.previous_page_number }}"><<</a>
-                {% endif %}
-                <span class="page-current">
-                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
-                </span>
-                {% if page_obj.has_next %}
-                    <a href="?page={{ page_obj.next_page_number }}">>></a>
-                {% endif %}
-            </span>
-        </div>
-    {% endif %}
+    <table id="tabletools" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
+        <thead>
+            <tr>
+                <th>Hora de ejecución</th>
+                <th>Ejecutado Por</th>
+                <th>Duración</th>
+                <th width="33%">Reporte</th>
+                <th>Reporte ID</th>
+                <th>Zona de prueba</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for object in recent_logs %}
+            <tr>
+                <td>{{ object.run_at|date:"SHORT_DATETIME_FORMAT" }}</td>
+                <td>{{ object.run_by_user.email }}</td>
+                <td>{{ object.duration|floatformat:2 }}ms</td>
+                <td class="log-sql">{{ object.sql }}</td>
+                <td> {% if object.query_id %}<a href="{% url "query_detail" object.query_id %}">Reporte {{ object.query_id }}</a>{% elif object.is_playground %}Zona de prueba{% else %}--{% endif %}</td>
+                <td><a href="{% url "explorer_playground" %}?querylog_id={{ object.id }}">Abrir</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 {% endblock %}
+{% block javascript %}
+    <script type="text/javascript">
+      $(document).ready(function() {
+        var table = $('#tabletools').dataTable({
+            "language": {
+                "lengthMenu": "_MENU_",
+                "sProcessing":     "Procesando...",
+                "sZeroRecords":    "No se encontraron resultados",
+                "sEmptyTable":     "Ningún dato disponible en esta tabla",
+                "sInfo":           "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                "sInfoEmpty":      "Mostrando registros del 0 al 0 de un total de 0 registros",
+                "sInfoFiltered":   "(filtrado de un total de _MAX_ registros)",
+                "sInfoPostFix":    "",
+                "sUrl":            "",
+                "sInfoThousands":  ",",
+                "sLoadingRecords": "Cargando...",
+                "oPaginate": {
+                    "sFirst":    "Primero",
+                    "sLast":     "Último",
+                    "sNext":     "Siguiente",
+                    "sPrevious": "Anterior"
+                },
+                "oAria": {
+                    "sSortAscending":  ": Activar para ordenar la columna de manera ascendente",
+                    "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+                }
+            }
+        });
+
+        $('.dataTables_filter input').attr('placeholder','Buscar');
+        $('#example_length').hide();
+
+        //DOM Manipulation to move datatable elements integrate to panel
+        $('.panel-ctrls').append($('.dataTables_filter').addClass("pull-right")).find("label").addClass("panel-ctrls-center");
+        $('.panel-ctrls').append("<i class='separator'></i>");
+        $('.panel-ctrls').append($('.dataTables_length').addClass("pull-left")).find("label").addClass("panel-ctrls-center");
+        $('.dataTables_paginate>ul.pagination').addClass("pull-right m0");
+      });
+    </script>
+{% endblock javascript %}

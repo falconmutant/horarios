@@ -131,7 +131,7 @@ def email_csv_query(request, query_id):
         email = request.POST.get('email', None)
         if email:
             execute_query.delay(query_id, email)
-            return HttpResponse(content={'message': 'message was sent successfully'})
+            return HttpResponse(content={'message': 'email se envio con exito'})
     return HttpResponse(status=403)
 
 
@@ -312,7 +312,7 @@ class QueryView(ExplorerContextMixin, View):
 
         query, form = QueryView.get_instance_and_form(request, query_id)
         success = form.is_valid() and form.save()
-        vm = query_viewmodel(request, query, form=form, message="Query saved." if success else None)
+        vm = query_viewmodel(request, query, form=form, message="Reporte Guardado." if success else None)
         return self.render_template('explorer/query.html', vm)
 
     @staticmethod
