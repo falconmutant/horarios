@@ -24,6 +24,7 @@ urlpatterns = [
   url(r'^carrera/$', views.CarreraList.as_view()),
   url(r'^carrera/(?P<pk>[0-9]+)/$', views.CarreraDetail.as_view()),
   url(r'^turno/$', views.TurnoList.as_view()),
+  url(r'^turno/(?P<pk>[0-9]+)/$', views.TurnoDetail.as_view()),
   url(r'^cuatrimestre/$', views.CuatrimestreList.as_view()),
   url(r'^solucion/$', views.SolucionList.as_view()),
 ]

@@ -362,6 +362,31 @@ class TurnoList(APIView):
     serializer = TurnoSerializer(model,many=True)
     return Response(serializer.data)
 
+class TurnoDetail(APIView):
+  def get_object(self, pk):
+    try:
+      return Turno.objects.get(pk=pk)
+    except Turno.DoesNotExist:
+      raise Http404
+
+  def get(self, request, pk, format=None):
+    turno = self.get_object(pk)
+    serializer = TurnoSerializer(turno)
+    return Response(serializer.data)
+
+  def put(self, request, pk, format=None):
+    turno = self.get_object(pk)
+    serializer = TurnoSerializer(turno, data=request.data)
+    if serializer.is_valid():
+      serializer.save()
+      return Response(serializer.data)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+  def delete(self, request, pk, format=None):
+    turno = self.get_object(pk)
+    turno.delete()
+    return Response(status=status.HTTP_204_NO_CONTENT)
+
 class CuatrimestreList(APIView):
   def get(self, request, format=None):
     model = Cuatrimestre.objects.all()
