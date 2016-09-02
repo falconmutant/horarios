@@ -28,4 +28,5 @@ urlpatterns = [
   url(r'^cuatrimestre/$', views.CuatrimestreList.as_view()),
   url(r'^cuatrimestre/(?P<pk>[0-9]+)/$', views.CuatrimestreDetail.as_view()),
   url(r'^solucion/$', views.SolucionList.as_view()),
+  url(r'^solucion/(?P<pk>[0-9]+)/$', views.SolucionDetail.as_view()),
 ]
