@@ -22,6 +22,9 @@
     .btn, .form-control{
       border-radius: 4px !important;
     }
+    .page-content{
+      padding-top:20px !important;
+    }
   </style>
 {% endblock css %}
 
@@ -167,9 +170,147 @@
       </div>
     </div>
   </div>
+  <div class="modal fade bs-example-modal-lg" tabindex="-1" id="disponibilidad" role="dialog" aria-labelledby="myLargeModalLabel">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title" id="myModalLabel">Disponibilidad aula</h4>
+        </div>
+        <div class="modal-body">
+          <table id="tabla_disponibilidad" class="table">
+            <thead>
+              <tr>
+                <th></th>
+                {% for hora in horas %}
+                  <th>{{hora.Hora}}</th>
+                {% endfor %}
+              </tr>
+            </thead>
+            <tbody id="tb-disponibilidad">
+              {% for dia in dias %}
+                <tr>
+                  <th>{{dia.Dia}}</th>
+                  {% for hora in horas %}
+                    <td id="{{dia.id}}{{hora.id}}" onclick="cambiar(this);"></td>
+                  {% endfor %}
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Registrar</button>
+        </div>
+      </div>
+    </div>
+  </div>
 {% endblock modal %}
 
 {% block javascript %}
   <script type="text/javascript" src="{% static "core/js/pnotify.min.js" %}"></script>
+<<<<<<< HEAD
+  <script type="text/javascript">
+  $(document).ready(function() {
+    var table = $('#tabletools').dataTable({
+      ajax: {
+              url: '/aula/getdata_json',
+              dataSrc: ''
+          },
+      columns: [
+        { data: 'Aula' },
+        { data: 'Modificar' },
+        { data: 'Eliminar' },
+        { data: 'Disponibilidad' },
+        { data: 'Materia' },
+        { data: 'Software' } 
+      ],
+        "language": {
+            "lengthMenu": "_MENU_",
+            "sProcessing":     "Procesando...",
+            "sZeroRecords":    "No se encontraron resultados",
+            "sEmptyTable":     "Ningún dato disponible en esta tabla",
+            "sInfo":           "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+            "sInfoEmpty":      "Mostrando registros del 0 al 0 de un total de 0 registros",
+            "sInfoFiltered":   "(filtrado de un total de _MAX_ registros)",
+            "sInfoPostFix":    "",
+            "sUrl":            "",
+            "sInfoThousands":  ",",
+            "sLoadingRecords": "Cargando...",
+            "oPaginate": {
+                "sFirst":    "Primero",
+                "sLast":     "Último",
+                "sNext":     "Siguiente",
+                "sPrevious": "Anterior"
+            },
+            "oAria": {
+                "sSortAscending":  ": Activar para ordenar la columna de manera ascendente",
+                "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+            }
+        }
+    });
+    $('.dataTables_filter input').attr('placeholder','Buscar');
+    $('#example_length').hide();
+
+    //DOM Manipulation to move datatable elements integrate to panel
+    $('.panel-ctrls').append($('.dataTables_filter').addClass("pull-right")).find("label").addClass("panel-ctrls-center");
+    $('.panel-ctrls').append("<i class='separator'></i>");
+    $('.panel-ctrls').append($('.dataTables_length').addClass("pull-left")).find("label").addClass("panel-ctrls-center");
+    $('.dataTables_paginate>ul.pagination').addClass("pull-right m0");
+  });
+  var color = '';
+  function cambiar(item){
+      var x = $(item).css('backgroundColor');
+      hexc(x);
+      if(color !='#337ab7'){
+        $(item).css("backgroundColor", "#337ab7");
+      }
+      else{
+        $(item).css("backgroundColor", "");
+      }
+  }
+  function hexc(colorval) {
+      var parts = '';
+      try{
+        parts = colorval.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
+        delete(parts[0]);
+        for (var i = 1; i <= 3; ++i) {
+            parts[i] = parseInt(parts[i]).toString(16);
+            if (parts[i].length == 1) parts[i] = '0' + parts[i];
+        }
+        color = '#' + parts.join('');
+      }
+      catch(err){
+        parts = colorval.match(/^rgba\((\d+),\s*(\d+),\s*(\d+),\s*(\d+)\)$/);
+        delete(parts[0]);
+        for (var i = 1; i <= 2; ++i) {
+            parts[i] = parseInt(parts[i]).toString(16);
+            if (parts[i].length == 1) parts[i] = '0' + parts[i];
+        }
+        color = '#' + parts.join('');
+      }
+  }
+  </script>
+  {% if mensaje == 1 %}
+    <script>
+      $(document).ready(function(){
+        new PNotify({
+                title: 'Exito',
+                text: 'La aula se registro con exito!',
+                type: 'success',
+                styling: 'fontawesome'
+              });
+      });
+    </script>
+  {% endif %}
+  {% for value in horas_no_disponibles %}
+    <script type="text/javascript">
+      $('#{{value.Id_Dia}}{{value.Id_Hora}}').removeAttr("onclick");
+      $('#{{value.Id_Dia}}{{value.Id_Hora}}').css("backgroundColor", "#cccccc");
+    </script>
+  {% endfor %}
+{% endblock javascript %}
+=======
   <script type="text/javascript" src="{% static "js/views/aula/index.js" %}"></script>
 {% endblock javascript %}
+>>>>>>> 10c3ba4306510ad030dead3e7bdedce35e9925a9

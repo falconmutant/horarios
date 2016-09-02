@@ -3,7 +3,7 @@
         <div class="col-md-12">
             <div role="tabpanel">
                 <ul class="nav nav-tabs" role="tablist">
-                    <li role="presentation" class="active"><a href="#previewpane" aria-controls="previewpane" role="tab" data-toggle="tab" id="preview-tab-label">Preview</a></li>
+                    <li role="presentation" class="active"><a href="#previewpane" aria-controls="previewpane" role="tab" data-toggle="tab" id="preview-tab-label">Previsualizacion</a></li>
                     {% if query.id and query.snapshot %}<li role="presentation"><a href="#snapshots" aria-controls="snapshots" role="tab" data-toggle="tab">Snapshots</a></li>{% endif %}
                     {% if data %}<li role="presentation"><a href="#pivot" aria-controls="pivot" role="tab" data-toggle="tab" id="pivot-tab-label">Pivot</a></li>{% endif %}
                 </ul>
@@ -13,12 +13,12 @@
                             <div class="panel-heading">
                               <div class="row">
                                 <div class="col-md-6">
-                                  <span class="panel-title">Execution time: {{ duration|floatformat:2 }} ms</span>
+                                  <span class="panel-title">Tiempo de ejecución: {{ duration|floatformat:2 }} ms</span>
                                 </div>
                                 <div class="col-md-6 text-right">
                                   <span class="row-control">
                                       {% if rows > total_rows %}
-                                          Showing {{ total_rows }} of {{ total_rows }} total rows.
+                                          Se visualizan {{ total_rows }} de {{ total_rows }} columnas en total.
                                       {% else %}
                                           First <input class="rows-input" type="text" name="rows" id="rows" value="{{ rows }}" /> of {{ total_rows }} total rows.
                                       {% endif %}
