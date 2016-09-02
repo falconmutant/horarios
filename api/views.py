@@ -2,8 +2,8 @@ from django.http import Http404
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from aula.serializers import AulaSerializer
-from aula.models import Aula
+from aula.serializers import *
+from aula.models import *
 from grupo.serializers import GrupoSerializer
 from grupo.models import Grupo
 from maestro.serializers import MaestroSerializer
@@ -51,6 +51,19 @@ class AulaDetail(APIView):
     aula = self.get_object(pk)
     aula.delete()
     return Response(status=status.HTTP_204_NO_CONTENT)
+
+class Aula_Disponibilidad_List(APIView):
+  def get(self, request, format=None):
+    aula_disponibilidad = Aula_Disponibilidad.objects.all()
+    serializer = Aula_Disponibilidad_Serializer(aula_disponibilidad,many = True)
+    return Response(serializer.data)
+
+  def post(self, request, format=None):
+    serializer = Aula_Disponibilidad_Serializer(data=request.data)
+    if serializer.is_valid():
+      serializer.save()
+      return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class GrupoList(APIView):
   def get(self, request, format=None):
