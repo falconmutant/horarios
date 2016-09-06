@@ -7,6 +7,7 @@ class Aula(models.Model):
     Capacidad = models.TextField(null=False)
     Id_Tipo_de_aula = models.ForeignKey(Tipo_de_aula)
     Id_Planta_Edificio = models.ForeignKey(Planta_edificio)
+    disponibilidad = models.ManyToManyField(Disponibilidad, through='Aula_Disponibilidad')
     def __str__(self):
         return "%s" % (self.Nombre)
 
