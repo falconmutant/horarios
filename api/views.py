@@ -52,6 +52,41 @@ class AulaDetail(APIView):
     aula.delete()
     return Response(status=status.HTTP_204_NO_CONTENT)
 
+class Aula_Disponibilidad(APIView):
+  def post(self, request, pk, format=None):
+    serializer = Aula_Disponibilidad_Serializer(data={
+      'Id_Disponibilidad':request.POST.get("Id_Disponibilidad")
+      ,'Id_Aula':pk
+    })
+    if serializer.is_valid():
+      serializer.save()
+      return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class Aula_Software(APIView):
+  def post(self, request, pk, format=None):
+    serializer = Aula_Software_Serializer(data={
+      'Id_Software':request.POST.get('Id_Software')
+      ,'Id_Aula':pk
+    })
+    if serializer.is_valid():
+      serializer.save()
+      return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class Aula_Materia(APIView):
+  def post(self, request, pk, format=None):
+    serializer = Aula_Materia_Serializer(data={
+      'Id_Aula':pk
+      ,'Id_Materia':request.POST.get('Id_Materia')
+      ,'Horas_Obligatorias':request.POST.get('Horas_Obligatorias')
+      ,'Peso':request.POST.get('Peso')
+    })
+    if serializer.is_valid():
+      serializer.save()
+      return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 class GrupoList(APIView):
   def get(self, request, format=None):
     grupo = Grupo.objects.all()
