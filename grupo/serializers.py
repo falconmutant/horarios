@@ -1,7 +1,10 @@
 from rest_framework import serializers
-from .models import Grupo
+from .models import *
 
 class GrupoSerializer(serializers.ModelSerializer):
   class Meta:
     model = Grupo
-    fields = ('id','Nombre', 'Tipo_Grupo','Id_Turno')
+
+class Grupo_Materia_Serializer(serializers.ModelSerializer):
+  class Meta:
+    model = Grupo_Materia

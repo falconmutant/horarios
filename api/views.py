@@ -4,8 +4,8 @@ from rest_framework.response import Response
 from rest_framework import status
 from aula.serializers import *
 from aula.models import *
-from grupo.serializers import GrupoSerializer
-from grupo.models import Grupo
+from grupo.serializers import *
+from grupo.models import *
 from maestro.serializers import *
 from maestro.models import *
 from materia.serializers import MateriaSerializer
@@ -125,6 +125,17 @@ class GrupoDetail(APIView):
     grupo.delete()
     return Response(status=status.HTTP_204_NO_CONTENT)
 
+class Grupo_Materia_List(APIView):
+  def post(self, request, pk, format=None):
+    serializer = Grupo_Materia_Serializer(data={
+      'Id_Grupo': pk
+      ,'Id_Materia':request.POST.get('Id_Materia')
+    })
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 class MaestroList(APIView):
   def get(self, request, format=None):
     maestro = Maestro.objects.all()
@@ -183,8 +194,6 @@ class Maestro_Materia_List(APIView):
       serializer.save()
       return Response(serializer.data, status= status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
 
 class MateriaList(APIView):
   def get(self, request, format=None):
