@@ -8,6 +8,8 @@ class Aula(models.Model):
     Id_Tipo_de_aula = models.ForeignKey(Tipo_de_aula)
     Id_Planta_Edificio = models.ForeignKey(Planta_edificio)
     disponibilidad = models.ManyToManyField(Disponibilidad, through='Aula_Disponibilidad')
+    software = models.ManyToManyField(Software, through='Aula_Software')
+    materia = models.ManyToManyField(Materia, through='Aula_Materia')
     def __str__(self):
         return "%s" % (self.Nombre)
 
