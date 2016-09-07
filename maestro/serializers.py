@@ -1,9 +1,14 @@
 from rest_framework import serializers
-from .models import Maestro
+from .models import *
 
 class MaestroSerializer(serializers.ModelSerializer):
   class Meta:
     model = Maestro
-    fields = ('id','Nombre', 'Apellido_Paterno', 'Apellido_Materno', 'Contrato',
-      'Proyecto_Financiado', 'Grado_De_Estudio', 'Clase_Maestria',
-      'Num_Materias')
+
+class Maestro_Disponibilidad_Serializer(serializers.ModelSerializer):
+  class Meta:
+    model = Maestro_Disponibilidad
+
+class Maestro_Materia_Serializer(serializers.ModelSerializer):
+  class Meta:
+    model = Maestro_Materia

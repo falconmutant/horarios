@@ -6,8 +6,8 @@ from aula.serializers import *
 from aula.models import *
 from grupo.serializers import GrupoSerializer
 from grupo.models import Grupo
-from maestro.serializers import MaestroSerializer
-from maestro.models import Maestro
+from maestro.serializers import *
+from maestro.models import *
 from materia.serializers import MateriaSerializer
 from materia.models import Materia
 from modulos.serializers import *
@@ -161,6 +161,30 @@ class MaestroDetail(APIView):
     maestro = self.get_object(pk)
     maestro.delete()
     return Response(status=status.HTTP_204_NO_CONTENT)
+
+class Maestro_Disponibilidad_List(APIView):
+  def post(self, request, pk, format=None):
+    serializer= Maestro_Disponibilidad_Serializer(data={
+      'Id_Maestro':pk
+      ,'Id_Disponibilidad':request.POST.get('Id_Disponibilidad')
+    })
+    if(serializer.is_valid()):
+      serializer.save()
+      return Response(serializer.data, status= status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class Maestro_Materia_List(APIView):
+  def post(self, request, pk, format=None):
+    serializer= Maestro_Materia_Serializer(data={
+      'Id_Maestro':pk
+      ,'Id_Materia':request.POST.get('Id_Materia')
+    })
+    if(serializer.is_valid()):
+      serializer.save()
+      return Response(serializer.data, status= status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
 
 class MateriaList(APIView):
   def get(self, request, format=None):
