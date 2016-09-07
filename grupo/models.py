@@ -6,6 +6,7 @@ class Grupo(models.Model):
   Nombre = models.TextField(max_length=50, null=False)
   Tipo_Grupo = models.TextField(max_length=15,null=False)
   Id_Turno = models.ForeignKey(Turno)
+  materias = models.ManyToManyField(Materia, through='Grupo_Materia')
 
 class Grupo_Materia(models.Model):
   Id_Materia = models.ForeignKey(Materia)
