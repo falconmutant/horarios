@@ -17,6 +17,8 @@ class Maestro(models.Model):
   Grado_De_Estudio = models.CharField(max_length=50)
   Clase_Maestria = models.CharField(max_length=2)
   Num_Materias = models.SmallIntegerField()
+  materias= models.ManyToManyField(Materia, through='Maestro_Materia')
+  disponibilidad= models.ManyToManyField(Disponibilidad, through='Maestro_Disponibilidad')
 
 class Maestro_Materia(models.Model):
   Id_Materia = models.ForeignKey(Materia)
