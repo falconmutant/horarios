@@ -86,7 +86,7 @@ class Aula_Software_Detail(APIView):
     aula_software.delete()
     return Response(status=status.HTTP_204_NO_CONTENT)
 
-class Aula_Materia(APIView):
+class Aula_Materia_List(APIView):
   def post(self, request, pk, format=None):
     serializer = Aula_Materia_Serializer(data={
       'Id_Aula':pk
@@ -98,6 +98,12 @@ class Aula_Materia(APIView):
       serializer.save()
       return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class Aula_Materia_Detail(APIView):
+  def delete(self, request, pk, fk, format=None):
+    aula_materia = Aula_Materia.objects.filter(Id_Aula=pk, Id_Materia=fk)
+    aula_materia.delete()
+    return Response(status=status.HTTP_204_NO_CONTENT)
 
 class GrupoList(APIView):
   def get(self, request, format=None):
