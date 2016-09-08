@@ -202,6 +202,12 @@ class Maestro_Disponibilidad_List(APIView):
       return Response(serializer.data, status= status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+class Maestro_Disponibilidad_Detail(APIView):
+  def delete(self, request, pk, fk, format=None):
+    maestro_disponibilidad = Maestro_Disponibilidad.objects.filter(Id_Maestro=pk, Id_Disponibilidad=fk)
+    maestro_disponibilidad.delete()
+    return Response(status=status.HTTP_204_NO_CONTENT)
+
 class Maestro_Materia_List(APIView):
   def post(self, request, pk, format=None):
     serializer= Maestro_Materia_Serializer(data={
@@ -212,6 +218,12 @@ class Maestro_Materia_List(APIView):
       serializer.save()
       return Response(serializer.data, status= status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class Maestro_Materia_Detail(APIView):
+  def delete(self, request, pk, fk, format=None):
+    maestro_materia= Maestro_Materia.objects.filter(Id_Maestro=pk, Id_Materia=fk)
+    maestro_materia.delete()
+    return Response(status=status.HTTP_204_NO_CONTENT)
 
 class MateriaList(APIView):
   def get(self, request, format=None):
