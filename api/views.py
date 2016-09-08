@@ -275,6 +275,13 @@ class SoftwareList(APIView):
     serializer = SoftwareSerializer(model,many=True)
     return Response(serializer.data)
 
+  def post(self, request, format=None):
+    serializer = SoftwareSerializer(data=request.data)
+    if serializer.is_valid():
+      serializer.save()
+      return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serialiser.errors, status=status.HTTP_400_BAD_REQUEST)
+
 class SoftwareDetail(APIView):
   def get_object(self, pk):
     try:
@@ -305,6 +312,13 @@ class PlantaList(APIView):
     model = Planta.objects.all()
     serializer = PlantaSerializer(model,many=True)
     return Response(serializer.data)
+
+  def post(selft, request, format=None):
+    serializer = PlantaSerializer(data=request.data)
+    if serializer.is_valid():
+      serializer.save()
+      return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class PlantaDetail(APIView):
   def get_object(self, pk):
@@ -337,6 +351,13 @@ class EdificioList(APIView):
     serializer = EdificioSerializer(model,many=True)
     return Response(serializer.data)
 
+  def post(selft, request, format=None):
+    serializer = EdificioSerializer(data=request.data)
+    if serializer.is_valid():
+      serializer.save()
+      return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 class EdificioDetail(APIView):
   def get_object(self, pk):
     try:
@@ -368,6 +389,13 @@ class Tipo_de_aulaList(APIView):
     serializer = Tipo_de_aulaSerializer(model,many=True)
     return Response(serializer.data)
 
+  def post(selft, request, format=None):
+    serializer = Tipo_de_aulaSerializer(data=request.data)
+    if serializer.is_valid():
+      serializer.save()
+      return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 class Tipo_de_aulaDetail(APIView):
   def get_object(self, pk):
     try:
@@ -398,6 +426,13 @@ class DiaList(APIView):
     model = Dia.objects.all()
     serializer = DiaSerializer(model,many=True)
     return Response(serializer.data)
+
+  def post(selft, request, format=None):
+    serializer = DiaSerializer(data=request.data)
+    if serializer.is_valid():
+      serializer.save()
+      return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class DiaDetail(APIView):
   def get_object(self, pk):
@@ -468,6 +503,13 @@ class CarreraList(APIView):
     serializer = CarreraSerializer(model,many=True)
     return Response(serializer.data)
 
+  def post(self, request, format=None):
+    serializer = CarreraSerializer(data=request.data)
+    if serializer.is_valid():
+      serializer.save()
+      return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 class CarreraDetail(APIView):
   def get_object(self, pk):
     try:
@@ -498,6 +540,13 @@ class TurnoList(APIView):
     model = Turno.objects.all()
     serializer = TurnoSerializer(model,many=True)
     return Response(serializer.data)
+
+  def post(self, request, format=None):
+    serializer = TurnoSerializer(data=request.data)
+    if serializer.is_valid():
+      serializer.save()
+      return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class TurnoDetail(APIView):
   def get_object(self, pk):
@@ -568,6 +617,13 @@ class CuatrimestreList(APIView):
     serializer = CuatrimestreSerializer(model,many=True)
     return Response(serializer.data)
 
+  def post(self, request, format=None):
+    serializer = CuatrimestreSerializer(data=request.data)
+    if serializer.is_valid():
+      serializer.save()
+      return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 class CuatrimestreDetail(APIView):
   def get_object(self, pk):
     try:
@@ -598,6 +654,13 @@ class SolucionList(APIView):
     model = Solucion.objects.all()
     serializer = SolucionSerializer(model,many=True)
     return Response(serializer.data)
+
+  def post(self, request, format=None):
+    serializer = SolucionSerializer(data=request.data)
+    if serializer.is_valid():
+      serializer.save()
+      return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class SolucionDetail(APIView):
   def get_object(self, pk):
