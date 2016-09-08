@@ -154,6 +154,12 @@ class Grupo_Materia_List(APIView):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+class Grupo_Materia_Detail(APIView):
+  def delete(self, request, pk, fk, format=None):
+    grupo_materia = Grupo_Materia.objects.filter(Id_Materia=fk, Id_Grupo=pk)
+    grupo_materia.delete()
+    return Response(status=status.HTTP_204_NO_CONTENT)
+
 class MaestroList(APIView):
   def get(self, request, format=None):
     maestro = Maestro.objects.all()

@@ -12,6 +12,7 @@ urlpatterns = [
   url(r'^grupo/$', views.GrupoList.as_view()),
   url(r'^grupo/(?P<pk>[0-9]+)/$', views.GrupoDetail.as_view()),
   url(r'^grupo/(?P<pk>[0-9]+)/materia/$', views.Grupo_Materia_List.as_view()),
+  url(r'^grupo/(?P<pk>[0-9]+)/materia/(?P<fk>[0-9]+)/$', views.Grupo_Materia_Detail.as_view()),
   url(r'^maestro/$', views.MaestroList.as_view()),
   url(r'^maestro/(?P<pk>[0-9]+)/$', views.MaestroDetail.as_view()),
   url(r'^maestro/(?P<pk>[0-9]+)/disponibilidad/$', views.Maestro_Disponibilidad_List.as_view()),
