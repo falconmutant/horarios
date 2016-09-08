@@ -52,7 +52,7 @@ class AulaDetail(APIView):
     aula.delete()
     return Response(status=status.HTTP_204_NO_CONTENT)
 
-class Aula_Disponibilidad(APIView):
+class Aula_Disponibilidad_List(APIView):
   def post(self, request, pk, format=None):
     serializer = Aula_Disponibilidad_Serializer(data={
       'Id_Disponibilidad':request.POST.get("Id_Disponibilidad")
@@ -62,6 +62,12 @@ class Aula_Disponibilidad(APIView):
       serializer.save()
       return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class Aula_Disponibilidad_Detail(APIView):
+  def delete(self, request, pk, fk, format=None):
+    aula_disponibilidad = Aula_Disponibilidad.objects.filter(Id_Aula=pk,Id_Disponibilidad=fk)
+    aula_disponibilidad.delete()
+    return Response(status=status.HTTP_204_NO_CONTENT)
 
 class Aula_Software(APIView):
   def post(self, request, pk, format=None):

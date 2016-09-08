@@ -3,7 +3,8 @@ from api import views
 urlpatterns = [
   url(r'^aula/$', views.AulaList.as_view()),
   url(r'^aula/(?P<pk>[0-9]+)/$', views.AulaDetail.as_view()),
-  url(r'^aula/(?P<pk>[0-9]+)/disponibilidad/$', views.Aula_Disponibilidad.as_view()),
+  url(r'^aula/(?P<pk>[0-9]+)/disponibilidad/$', views.Aula_Disponibilidad_List.as_view()),
+  url(r'^aula/(?P<pk>[0-9]+)/disponibilidad/(?P<fk>[0-9]+)/$', views.Aula_Disponibilidad_Detail.as_view()),
   url(r'^aula/(?P<pk>[0-9]+)/software/$', views.Aula_Software.as_view()),
   url(r'^aula/(?P<pk>[0-9]+)/materia/$', views.Aula_Materia.as_view()),
   url(r'^grupo/$', views.GrupoList.as_view()),
