@@ -116,17 +116,19 @@
         <div class="modal-header">
           <h4 class="modal-title" id="myModalLabel">Modicar aula</h4>
         </div>
-        <form action="" class="form-horizontal" method="post">{% csrf_token %}
+        <form action="" class="form-horizontal" method="POST">{% csrf_token %}
+          <input name="id_aula" type="hidden" id="modificar-aula" value="0">
+          <input name="id_planta_edificio" type="hidden" id="modificar-planta_edificio" value="0">
           <div class="modal-body">
             <div class="form-group">
               <div class="form-group">
                 <label for="state_id" class="col-sm-2 control-label">Nombre</label>
                 <div class="col-sm-4">
-                  <input name="nombre" required class="form-control" type="text">
+                  <input name="nombre" id="modificar-nombre" required class="form-control" type="text">
                 </div>
                 <label for="municipality_id" class="col-sm-1 control-label">Tipo</label>
                 <div class="col-sm-4">
-                  <select name="tipo" required class="form-control">
+                  <select name="tipo" id="modificar-tipo" required class="form-control">
                     <option></option>
                     {% for tipo in aula_tipo %}
                       <option value="{{tipo.id}}">{{tipo.Nombre}}</option>
@@ -137,11 +139,11 @@
               <div class="form-group">
                 <label for="municipality_id" class="col-sm-2 control-label">Capacidad</label>
                 <div class="col-sm-4">
-                  <input name="capacidad" required class="form-control" type="text">
+                  <input name="capacidad" id="modificar-capacidad" required class="form-control" type="text">
                 </div>
                 <label for="municipality_id" class="col-sm-1 control-label">Edificio</label>
                 <div class="col-sm-4">
-                  <select name="edificio" class="form-control" required>
+                  <select name="edificio" id="modificar-edificio" class="form-control" required>
                     <option></option>
                     {% for value in edificio %}
                       <option value="{{value.id}}">{{value.Nombre_Edificio}}</option>
@@ -152,7 +154,7 @@
               <div class="form-group">
                 <label class="col-sm-2 control-label">Planta</label>
                 <div class="col-md-4">
-                  <select name="planta" class="form-control" required>
+                  <select name="planta" id="modificar-planta" class="form-control" required>
                     <option></option>
                     {% for value in planta %}
                       <option value="{{value.id}}">{{value.Planta}}</option>
@@ -164,7 +166,7 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-            <button type="submit" class="btn btn-primary">Registrar</button>
+            <button type="submit" class="btn btn-primary">Modificar</button>
           </div>
         </form>
       </div>
@@ -190,17 +192,29 @@
               {% for dia in dias %}
                 <tr>
                   <th>{{dia.Dia}}</th>
+                  {% with forloop.counter0 as count_dias %}
                   {% for hora in horas %}
-                    <td id="{{dia.id}}{{hora.id}}" onclick="cambiar(this);"></td>
+                    {% if count_dias > 0 %}
+                      {% widthratio count_dias 1 horas|length as id %}
+                      {% with forloop.counter|add:id as disp %}
+                        <td id="{{dia.id}}{{hora.id}}" data-disponibilidad="{{disp}}" onclick="cambiar(this);"></td>
+                      {% endwith %}
+                    {% else %}
+                      {% widthratio 1 1 1 as id %}
+                      {% with forloop.counter as disp %}
+                        <td id="{{dia.id}}{{hora.id}}" data-disponibilidad="{{disp}}" onclick="cambiar(this);"></td>
+                      {% endwith %}
+                    {% endif %}
+                    
                   {% endfor %}
+                  {% endwith %}
                 </tr>
               {% endfor %}
             </tbody>
           </table>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-          <button type="submit" class="btn btn-primary">Registrar</button>
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
         </div>
       </div>
     </div>
@@ -210,15 +224,82 @@
 {% block javascript %}
   <script type="text/javascript" src="{% static "core/js/pnotify.min.js" %}"></script>
   <script type="text/javascript">
+  var id_aula = 0;
   var color = '';
+  function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie != '') {
+      var cookies = document.cookie.split(';');
+      for (var i = 0; i < cookies.length; i++) {
+        var cookie = jQuery.trim(cookies[i]);
+        // Does this cookie string begin with the name we want?
+        if (cookie.substring(0, name.length + 1) == (name + '=')) {
+          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+          break;
+        }
+      }
+    }
+    return cookieValue;
+  }
+  function cargar(aula){
+    id_aula=aula;
+    $.ajax({
+      url: '../api/aula/'+aula+'/',
+      success: function (data) {
+        //$("ul").find("[data-slide='" + current + "']");
+        '{% for dia in dias %}'
+          '{% for hora in horas %}'
+            $('#{{dia.id}}{{hora.id}}').css("backgroundColor", "");
+          '{% endfor %}'  
+        '{% endfor %}'
+        '{% for value in horas_no_disponibles %}'
+            $('#{{value.Id_Dia}}{{value.Id_Hora}}').removeAttr("onclick");
+            $('#{{value.Id_Dia}}{{value.Id_Hora}}').css("backgroundColor", "#cccccc");
+        '{% endfor %}'
+        data.disponibilidad.forEach(function(id_disponibilidad) {
+          $('td[data-disponibilidad="' + id_disponibilidad + '"]').css("backgroundColor", "#337ab7");
+        });
+      }
+    });
+  }
   function cambiar(item){
       var x = $(item).css('backgroundColor');
       hexc(x);
       if(color !='#337ab7'){
-        $(item).css("backgroundColor", "#337ab7");
+        var id_disp = $(item).attr('data-disponibilidad');
+        var csrftoken = getCookie('csrftoken');
+        $.ajax({
+            url : "../api/aula/"+id_aula+"/disponibilidad/",
+            type : "POST",
+            data : { Id_Disponibilidad : id_disp,
+                     csrfmiddlewaretoken : csrftoken
+                    },
+            success : function(json) {
+              $(item).css("backgroundColor", "#337ab7");
+            },
+            error : function(xhr,errmsg,err) {
+              console.log(errmsg);
+              console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+            }
+        });
       }
       else{
-        $(item).css("backgroundColor", "");
+        var id_disp = $(item).attr('data-disponibilidad');
+        var csrftoken = getCookie('csrftoken');
+        $.ajax({
+            url : "../api/aula/"+id_aula+"/disponibilidad/"+id_disp+"/",
+            type : "DELETE",
+            beforeSend: function(xhr) {
+              xhr.setRequestHeader("X-CSRFToken", getCookie("csrftoken"));
+            },
+            success : function(json) {
+              $(item).css("backgroundColor", "");
+            },
+            error : function(xhr,errmsg,err) {
+              console.log(errmsg);
+              console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+            }
+        });
       }
   }
   function hexc(colorval) {
@@ -242,6 +323,52 @@
         color = '#' + parts.join('');
       }
   }
+  function eliminar(aula){
+    $.ajax({
+      url : "../api/aula/"+aula+"/",
+      type : "DELETE",
+      beforeSend: function(xhr) {
+        xhr.setRequestHeader("X-CSRFToken", getCookie("csrftoken"));
+      },
+      success : function(json) {
+        $(item).css("backgroundColor", "");
+      },
+      error : function(xhr,errmsg,err) {
+        console.log(errmsg);
+        console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+      }
+    });
+  }
+  function modificar(aula){
+    $.ajax({
+      url : "../api/aula/"+aula+"/",
+      type : "GET",
+      success : function(data) {
+        $.ajax({
+          url : "../api/planta_edificio/"+data.Id_Planta_Edificio+"/",
+          type : "GET",
+          success : function(json) {
+            $('#modificar-nombre').val(data.Nombre);
+            $('#modificar-tipo').val(data.Id_Tipo_de_aula);
+            $('#modificar-capacidad').val(data.Capacidad);
+            $('#modificar-edificio').val(json.Id_Edificio);
+            $('#modificar-planta').val(json.Id_Planta);
+            $('#modificar-aula').val(data.id);
+            $('#modificar-planta_edificio').val(json.id);
+            console.log(data);
+          },
+          error : function(xhr,errmsg,err) {
+            console.log(errmsg);
+            console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+          }
+        });
+      },
+      error : function(xhr,errmsg,err) {
+        console.log(errmsg);
+        console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+      }
+    });
+  }
   </script>
   {% if mensaje == 1 %}
     <script>
@@ -255,11 +382,18 @@
       });
     </script>
   {% endif %}
-  {% for value in horas_no_disponibles %}
-    <script type="text/javascript">
-      $('#{{value.Id_Dia}}{{value.Id_Hora}}').removeAttr("onclick");
-      $('#{{value.Id_Dia}}{{value.Id_Hora}}').css("backgroundColor", "#cccccc");
+  {% if mensaje == 2 %}
+    <script>
+      $(document).ready(function(){
+        new PNotify({
+                title: 'Exito',
+                text: 'La aula se modifico con exito!',
+                type: 'success',
+                styling: 'fontawesome'
+              });
+      });
     </script>
-  {% endfor %}
+  {% endif %}
+  
   <script type="text/javascript" src="{% static "js/views/aula/index.js" %}"></script>
 {% endblock javascript %}

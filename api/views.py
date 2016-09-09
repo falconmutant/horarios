@@ -573,6 +573,44 @@ class TurnoDetail(APIView):
     turno.delete()
     return Response(status=status.HTTP_204_NO_CONTENT)
 
+class Planta_edificioList(APIView):
+  def get(self, request, format=None):
+    model = Planta_edificio.objects.all()
+    serializer = Planta_edificioSerializer(model,many=True)
+    return Response(serializer.data)
+
+  def post(self, request, format=None):
+    serializer = Planta_edificioSerializer(data=request.data)
+    if serializer.is_valid():
+      serializer.save()
+      return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class Planta_edificioDetail(APIView):
+  def get_object(self, pk):
+    try:
+      return Planta_edificio.objects.get(pk=pk)
+    except Planta_edificio.DoesNotExist:
+      raise Http404
+
+  def get(self, request, pk, format=None):
+    planta_edificio = self.get_object(pk)
+    serializer = Planta_edificioSerializer(planta_edificio)
+    return Response(serializer.data)
+
+  def put(self, request, pk, format=None):
+    planta_edificio = self.get_object(pk)
+    serializer = Planta_edificioSerializer(planta_edificio, data=request.data)
+    if serializer.is_valid():
+      serializer.save()
+      return Response(serializer.data)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+  def delete(self, request, pk, format=None):
+    planta_edificio = self.get_object(pk)
+    planta_edificio.delete()
+    return Response(status=status.HTTP_204_NO_CONTENT)
+
 class DisponibilidadList(APIView):
   def get(self, request, format=None):
     model = Disponibilidad.objects.all()

@@ -41,6 +41,11 @@ class TurnoSerializer(serializers.ModelSerializer):
     model = Turno
     fields = ('id', 'Turno',)
 
+class Planta_edificioSerializer(serializers.ModelSerializer):
+  class Meta:
+    model = Planta_edificio
+    fields = ('id', 'Id_Planta', 'Id_Edificio')
+
 class DisponibilidadSerializer(serializers.ModelSerializer):
   class Meta:
     model = Disponibilidad
