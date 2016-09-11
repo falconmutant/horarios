@@ -54,7 +54,7 @@ class Disponibilidad(models.Model):
 		return "%s-%s" % (self.Id_Hora,self.Id_Dia)
 
 class Cuatrimestre(models.Model):
-	Cuatrimestre = models.TextField(null=False)
+	Cuatrimestre = models.SmallIntegerField()
 	Id_Carrera = models.ForeignKey(Carrera)
 	def __str__(self):
 		return "%s-%s" % (self.Cuatrimestre,self.Id_Carrera)

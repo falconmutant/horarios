@@ -8,9 +8,15 @@
   active open selected
 {% endblock aula %}
 
-{% block css%}
 {% load staticfiles %}
+
+{% block css%}
+
   <link type="text/css" href="{% static "core/css/pnotify.css" %}" rel="stylesheet">
+  <link type="text/css" href="{% static "core/css/ion.rangeSlider.css" %}" rel="stylesheet">
+  <link type="text/css" href="{% static "core/css/ion.rangeSlider.skinFlat.css" %}" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/multi-select/0.9.12/css/multi-select.css" rel="stylesheet" />
+  
   <style type="text/css">
     .a-details,.a-details:hover{
       float: right;
@@ -24,6 +30,9 @@
     }
     .page-content{
       padding-top:20px !important;
+    }
+    .ms-container{
+      width: 100% !important;
     }
   </style>
 {% endblock css %}
@@ -172,6 +181,21 @@
       </div>
     </div>
   </div>
+  <div class="modal fade bs-example-modal-sm" tabindex="-1" id="eliminar" role="dialog" aria-labelledby="mySmallModalLabel">
+    <div class="modal-dialog modal-sm" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title" id="myModalLabel">Eliminar aula</h4>
+        </div>
+        <div class="modal-body">
+          <center>
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+            <button onclick="eliminar();" class="btn btn-danger">Eliminar</button>
+          </center>
+        </div>
+      </div>
+    </div>
+  </div>
   <div class="modal fade bs-example-modal-lg" tabindex="-1" id="disponibilidad" role="dialog" aria-labelledby="myLargeModalLabel">
     <div class="modal-dialog modal-lg" role="document">
       <div class="modal-content">
@@ -219,20 +243,92 @@
       </div>
     </div>
   </div>
+  <div class="modal fade bs-example-modal-lg" tabindex="-1" id="materia" role="dialog" aria-labelledby="myLargeModalLabel">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title" id="myModalLabel">Registro de materia en aula</h4>
+        </div>
+        <div class="modal-body">
+          <form action="" class="form-horizontal" method="POST">{% csrf_token %}
+            <div class="form-group">
+              <div class="form-group">
+                <label class="col-sm-2 control-label">Horas</label>
+                <div class="col-sm-4">
+                  <input type="text" id="range_horas" name="horas" value="" />
+                </div>
+                <label class="col-sm-1 control-label">Peso</label>
+                <div class="col-sm-4">
+                  <input type="text" id="range_peso" name="peso" value="" />
+                </div>
+              </div>
+              <br>
+              <br>
+              <div class="form-group">
+                <label class="col-sm-2 control-label">Materias</label>
+                <div class="col-sm-9">
+                  <select class="searchable form-control" id='custom-headers' multiple='multiple'>
+                    {% for materia in materias %}
+                      <option id="select-materia" value="{{materia.id}}">{{materia.Nombre}}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade bs-example-modal-lg" tabindex="-1" id="software" role="dialog" aria-labelledby="myLargeModalLabel">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title" id="myModalLabel">Registro de software en aula</h4>
+        </div>
+        <div class="modal-body">
+          <form action="" class="form-horizontal" method="POST">{% csrf_token %}
+            <div class="form-group">
+              <div class="form-group">
+                <label class="col-sm-2 control-label">Software</label>
+                <div class="col-sm-9">
+                  <select class="searchable-2 form-control" id='custom-headers' multiple='multiple'>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+        </div>
+      </div>
+    </div>
+  </div>
 {% endblock modal %}
 
 {% block javascript %}
   <script type="text/javascript" src="{% static "core/js/pnotify.min.js" %}"></script>
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/multi-select/0.9.12/js/jquery.multi-select.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.quicksearch/2.3.0/jquery.quicksearch.js"></script>
+  <script type="text/javascript" src="{% static "core/js/ion.rangeSlider.min.js" %}"></script>
+  <script type="text/javascript" src="{% static "js/views/aula/index.js" %}"></script>
   <script type="text/javascript">
   var id_aula = 0;
   var color = '';
+  var csrftoken = getCookie('csrftoken');
+  function setidaula(aula){
+    id_aula=aula;
+  }
   function getCookie(name) {
     var cookieValue = null;
     if (document.cookie && document.cookie != '') {
       var cookies = document.cookie.split(';');
       for (var i = 0; i < cookies.length; i++) {
         var cookie = jQuery.trim(cookies[i]);
-        // Does this cookie string begin with the name we want?
         if (cookie.substring(0, name.length + 1) == (name + '=')) {
           cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
           break;
@@ -267,7 +363,7 @@
       hexc(x);
       if(color !='#337ab7'){
         var id_disp = $(item).attr('data-disponibilidad');
-        var csrftoken = getCookie('csrftoken');
+        csrftoken = getCookie('csrftoken');
         $.ajax({
             url : "../api/aula/"+id_aula+"/disponibilidad/",
             type : "POST",
@@ -323,15 +419,15 @@
         color = '#' + parts.join('');
       }
   }
-  function eliminar(aula){
+  function eliminar(){
     $.ajax({
-      url : "../api/aula/"+aula+"/",
+      url : "../api/aula/"+id_aula+"/",
       type : "DELETE",
       beforeSend: function(xhr) {
         xhr.setRequestHeader("X-CSRFToken", getCookie("csrftoken"));
       },
       success : function(json) {
-        $(item).css("backgroundColor", "");
+        window.location='/aula/';
       },
       error : function(xhr,errmsg,err) {
         console.log(errmsg);
@@ -355,7 +451,6 @@
             $('#modificar-planta').val(json.Id_Planta);
             $('#modificar-aula').val(data.id);
             $('#modificar-planta_edificio').val(json.id);
-            console.log(data);
           },
           error : function(xhr,errmsg,err) {
             console.log(errmsg);
@@ -366,6 +461,154 @@
       error : function(xhr,errmsg,err) {
         console.log(errmsg);
         console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+      }
+    });
+  }
+  function materia(aula){
+    id_aula=aula;
+    $('.searchable').empty();
+    '{% for materia in materias %}'
+      $('.searchable').append('<option id="select-materia" value="{{materia.id}}">{{materia.Nombre}}</option>');
+    '{% endfor %}'
+    $.ajax({
+      url: '../api/aula/'+aula+'/',
+      success: function (data) {
+        data.materia.forEach(function(id_materia) {
+          $('#select-materia[value="' + id_materia + '"]').attr("selected",true);
+        });
+        $('.searchable').multiSelect({
+          selectableHeader: "<input type='text' class='search-input form-control' autocomplete='off' placeholder='Buscar materia a seleccionar'>",
+          selectionHeader: "<input type='text' class='search-input form-control' autocomplete='off' placeholder='Buscar materia seleccionada'>",
+          afterInit: function(ms){
+            var that = this,
+                $selectableSearch = that.$selectableUl.prev(),
+                $selectionSearch = that.$selectionUl.prev(),
+                selectableSearchString = '#'+that.$container.attr('id')+' .ms-elem-selectable:not(.ms-selected)',
+                selectionSearchString = '#'+that.$container.attr('id')+' .ms-elem-selection.ms-selected';
+
+            that.qs1 = $selectableSearch.quicksearch(selectableSearchString)
+            .on('keydown', function(e){
+              if (e.which === 40){
+                that.$selectableUl.focus();
+                return false;
+              }
+            });
+
+            that.qs2 = $selectionSearch.quicksearch(selectionSearchString)
+            .on('keydown', function(e){
+              if (e.which == 40){
+                that.$selectionUl.focus();
+                return false;
+              }
+            });
+          },
+          afterSelect: function(values){
+            $.ajax({
+                url : "../api/aula/"+id_aula+"/materia/",
+                type : "POST",
+                data : { Id_Materia : values[0],
+                         Horas_Obligatorias:$('#range_horas').val(),
+                         Peso:$('#range_peso').val(),
+                         csrfmiddlewaretoken : csrftoken
+                        },
+                success : function(json) {
+                },
+                error : function(xhr,errmsg,err) {
+                  console.log(errmsg);
+                  console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+                }
+            });
+          },
+          afterDeselect: function(values){
+            $.ajax({
+                url : "../api/aula/"+id_aula+"/materia/"+values[0]+"/",
+                type : "DELETE",
+                beforeSend: function(xhr) {
+                  xhr.setRequestHeader("X-CSRFToken", getCookie("csrftoken"));
+                },
+                success : function(json) {
+                },
+                error : function(xhr,errmsg,err) {
+                  console.log(errmsg);
+                  console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+                }
+            });
+          }
+        });
+        $(".searchable").multiSelect('refresh');
+      }
+    });
+  }
+  function software(aula){
+    id_aula=aula;
+    $('.searchable-2').empty();
+    '{% for software in softwares %}'
+      $('.searchable-2').append('<option id="select-software" value="{{software.id}}">{{software.Nombre}}</option>');
+    '{% endfor %}'
+    $.ajax({
+      url: '../api/aula/'+aula+'/',
+      success: function (data) {
+        data.software.forEach(function(id_software) {
+          $('#select-software[value="' + id_software + '"]').attr("selected",true);
+        });
+        $('.searchable-2').multiSelect({
+          selectableHeader: "<input type='text' class='search-input form-control' autocomplete='off' placeholder='Buscar software a seleccionar'>",
+          selectionHeader: "<input type='text' class='search-input form-control' autocomplete='off' placeholder='Buscar software seleccionada'>",
+          afterInit: function(ms){
+            var that = this,
+                $selectableSearch = that.$selectableUl.prev(),
+                $selectionSearch = that.$selectionUl.prev(),
+                selectableSearchString = '#'+that.$container.attr('id')+' .ms-elem-selectable:not(.ms-selected)',
+                selectionSearchString = '#'+that.$container.attr('id')+' .ms-elem-selection.ms-selected';
+
+            that.qs1 = $selectableSearch.quicksearch(selectableSearchString)
+            .on('keydown', function(e){
+              if (e.which === 40){
+                that.$selectableUl.focus();
+                return false;
+              }
+            });
+
+            that.qs2 = $selectionSearch.quicksearch(selectionSearchString)
+            .on('keydown', function(e){
+              if (e.which == 40){
+                that.$selectionUl.focus();
+                return false;
+              }
+            });
+          },
+          afterSelect: function(values){
+            $.ajax({
+                url : "../api/aula/"+id_aula+"/software/",
+                type : "POST",
+                data : { Id_Software : values[0],
+                         csrfmiddlewaretoken : csrftoken
+                        },
+                success : function(json) {
+                },
+                error : function(xhr,errmsg,err) {
+                  console.log(errmsg);
+                  console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+                }
+            });
+          },
+          afterDeselect: function(values){
+            $.ajax({
+                url : "../api/aula/"+id_aula+"/software/"+values[0]+"/",
+                type : "DELETE",
+                beforeSend: function(xhr) {
+                  xhr.setRequestHeader("X-CSRFToken", getCookie("csrftoken"));
+                },
+                success : function(json) {
+                },
+                error : function(xhr,errmsg,err) {
+                  console.log(errmsg);
+                  console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+                }
+            });
+          }
+        });
+        $(".searchable-2").multiSelect('refresh');
       }
     });
   }
@@ -394,6 +637,17 @@
       });
     </script>
   {% endif %}
+  <script type="text/javascript">
+    $("#range_horas").ionRangeSlider({
+        min: 1,
+        max: 10,
+        from: 3
+    });
+    $("#range_peso").ionRangeSlider({
+        min: 1,
+        max: 10,
+        from: 3
+    });
+  </script>
   
-  <script type="text/javascript" src="{% static "js/views/aula/index.js" %}"></script>
 {% endblock javascript %}

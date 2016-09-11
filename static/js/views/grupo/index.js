@@ -2,16 +2,14 @@ $(document).ready(function() {
   var url = '/api/';
   var table = $('#tabletools').dataTable({
     ajax: {
-      url: '/aula/getdata_json',
+      url: '/grupo/getdata_json',
       dataSrc: ''
     },
     columns: [
-      { data: 'Aula' },
+      { data: 'Nombre' },
       { data: 'Modificar' },
       { data: 'Eliminar' },
-      { data: 'Disponibilidad' },
-      { data: 'Materia' },
-      { data: 'Software' }
+      { data: 'Materia' }
     ],
     "language": {
       "lengthMenu": "_MENU_",

@@ -4,6 +4,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.template import RequestContext
 from modulos.models import *
+from materia.models import Materia
 from .models import *
 from django.db import connection
 
@@ -20,7 +21,8 @@ def aula(request):
 	cursor = connection.cursor()
 	cursor.execute("select dia.id as Id_Dia, hora.id as Id_Hora from (modulos_dia dia,modulos_hora hora) left join modulos_disponibilidad disp on dia.id=disp.Id_Dia_id and hora.id = disp.Id_Hora_id where disp.Id_Hora_id is null order by Id_Dia,Id_hora")
 	horas_no_disponibles = dictfetchall(cursor)
-	aula_disponibilidad = Aula_Disponibilidad.objects.all()
+	materias = Materia.objects.all()
+	softwares = Software.objects.all()
 	if request.POST:
 		if 'id_aula' not in request.POST:
 			id_planta = Planta.objects.get(id=request.POST["planta"])
@@ -49,10 +51,10 @@ def myajaxview(request):
 		response_data = {}
 		response_data['Aula'] = nombre.Nombre
 		response_data['Modificar'] = '<a href="" onclick="modificar('+str(nombre.id)+');" data-toggle="modal" data-target="#modificar"><i class="fa fa-book" aria-hidden="true"></i></a>'
-		response_data['Eliminar'] = '<a href="" onclick="eliminar('+str(nombre.id)+');"><i class="fa fa-trash" aria-hidden="true"></i></a>'
+		response_data['Eliminar'] = '<a href="" onclick="setidaula('+str(nombre.id)+');" data-toggle="modal" data-target="#eliminar"><i class="fa fa-trash" aria-hidden="true"></i></a>'
 		response_data['Disponibilidad'] = '<a href=""  onclick="cargar('+str(nombre.id)+');" data-toggle="modal" data-target="#disponibilidad"><i class="fa fa-cubes" aria-hidden="true"></i></a>'
-		response_data['Materia'] = '<a href=""><i class="fa fa-tasks" aria-hidden="true"></i></a>'
-		response_data['Software'] = '<a href=""><i class="fa fa-cubes" aria-hidden="true"></i></a>'
+		response_data['Materia'] = '<a href="" onclick="materia('+str(nombre.id)+');" data-toggle="modal" data-target="#materia"><i class="fa fa-tasks" aria-hidden="true"></i></a>'
+		response_data['Software'] = '<a href="" onclick="software('+str(nombre.id)+');" data-toggle="modal" data-target="#software"><i class="fa fa-cubes" aria-hidden="true"></i></a>'
 		report.append(response_data)
 	data = json.dumps(report)
 	return HttpResponse(data, content_type='application/json')

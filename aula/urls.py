@@ -3,5 +3,4 @@ from aula import views
 urlpatterns = [
 	url(r'^$', views.aula),
 	url(r'^getdata_json$', views.myajaxview, name='getdata_json'),
-	#url(r'^modificar$', views.modificar),
 ]
