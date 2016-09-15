@@ -1,0 +1,175 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  Disponibilidad
+{% endblock title %}
+
+{% block panel %}
+  active open selected
+{% endblock panel %}
+
+{% load staticfiles %}
+
+{% block css%}
+
+  <link type="text/css" href="{% static "core/css/pnotify.css" %}" rel="stylesheet">
+  <link type="text/css" href="{% static "core/css/ion.rangeSlider.css" %}" rel="stylesheet">
+  <link type="text/css" href="{% static "core/css/ion.rangeSlider.skinFlat.css" %}" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/multi-select/0.9.12/css/multi-select.css" rel="stylesheet" />
+  
+  <style type="text/css">
+    .a-details,.a-details:hover{
+      float: right;
+      border-radius: 6px !important;
+    }
+    .table td {
+      text-align: center;
+    }
+    .btn, .form-control{
+      border-radius: 4px !important;
+    }
+    .ms-container{
+      width: 100% !important;
+    }
+  </style>
+{% endblock css %}
+
+{% block content %}
+  <table id="tabla_disponibilidad" class="table">
+            <thead>
+              <tr>
+                <th></th>
+                {% for hora in horas %}
+                  <th>{{hora.Hora}}</th>
+                {% endfor %}
+              </tr>
+            </thead>
+            <tbody id="tb-disponibilidad">
+              {% for dia in dias %}
+                <tr>
+                  <th>{{dia.Dia}}</th>
+                  {% for hora in horas %}
+                    <td id="{{dia.id}}-{{hora.id}}" onclick="cambiar(this);"></td>         
+                  {% endfor %}
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+{% endblock content %}
+
+{% block javascript %}
+  <script type="text/javascript" src="{% static "core/js/pnotify.min.js" %}"></script>
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/multi-select/0.9.12/js/jquery.multi-select.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.quicksearch/2.3.0/jquery.quicksearch.js"></script>
+  <script type="text/javascript" src="{% static "core/js/ion.rangeSlider.min.js" %}"></script>
+  <script type="text/javascript">
+  var color = '';
+  var csrftoken = getCookie('csrftoken');
+  function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie != '') {
+      var cookies = document.cookie.split(';');
+      for (var i = 0; i < cookies.length; i++) {
+        var cookie = jQuery.trim(cookies[i]);
+        if (cookie.substring(0, name.length + 1) == (name + '=')) {
+          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+          break;
+        }
+      }
+    }
+    return cookieValue;
+  }
+  function cargar(){
+    $.ajax({
+      url: '../api/disponibilidad/',
+      success: function (data) {
+        data.forEach(function(data) {
+          $('#'+data.Id_Dia+'-'+data.Id_Hora).css("backgroundColor", "#337ab7");
+        });
+      }
+    });
+  }
+  function cambiar(item){
+      var x = $(item).css('backgroundColor');
+      hexc(x);
+      if(color !='#337ab7'){
+        csrftoken = getCookie('csrftoken');
+        var id = $(item).attr('id');
+        var datos = id.split("-");
+        console.log(id);
+        $.ajax({
+            url : "../api/disponibilidad/",
+            type : "POST",
+            data : { Id_Dia : datos[0],
+                     Id_Hora : datos[1],
+                     csrfmiddlewaretoken : csrftoken
+                    },
+            success : function(json) {
+              $(item).css("backgroundColor", "#337ab7");
+            },
+            error : function(xhr,errmsg,err) {
+              console.log(errmsg);
+              console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+            }
+        });
+      }
+      else{
+        var csrftoken = getCookie('csrftoken');
+        $.ajax({
+          url: '../api/disponibilidad/',
+          success: function (data) {
+            var id = $(item).attr('id');
+            data.forEach(function(data) {
+              var str =data.Id_Dia+'-'+data.Id_Hora;
+              if (id==str) {
+                $.ajax({
+                    url : "../api/disponibilidad/"+data.id+"/",
+                    type : "DELETE",
+                    beforeSend: function(xhr) {
+                      xhr.setRequestHeader("X-CSRFToken", getCookie("csrftoken"));
+                    },
+                    success : function(json) {
+                      $(item).css("backgroundColor", "");
+                    },
+                    error : function(xhr,errmsg,err) {
+                      console.log(errmsg);
+                      console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+                    }
+                });
+              };
+            });
+          }
+        });
+        
+      }
+  }
+  function hexc(colorval) {
+      var parts = '';
+      try{
+        parts = colorval.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
+        delete(parts[0]);
+        for (var i = 1; i <= 3; ++i) {
+            parts[i] = parseInt(parts[i]).toString(16);
+            if (parts[i].length == 1) parts[i] = '0' + parts[i];
+        }
+        color = '#' + parts.join('');
+      }
+      catch(err){
+        parts = colorval.match(/^rgba\((\d+),\s*(\d+),\s*(\d+),\s*(\d+)\)$/);
+        delete(parts[0]);
+        for (var i = 1; i <= 2; ++i) {
+            parts[i] = parseInt(parts[i]).toString(16);
+            if (parts[i].length == 1) parts[i] = '0' + parts[i];
+        }
+        color = '#' + parts.join('');
+      }
+  }
+  </script>
+    <script>
+      $(document).ready(function(){
+        cargar();
+      });
+    </script>
+
+  
+{% endblock javascript %}

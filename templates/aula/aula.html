@@ -216,22 +216,9 @@
               {% for dia in dias %}
                 <tr>
                   <th>{{dia.Dia}}</th>
-                  {% with forloop.counter0 as count_dias %}
                   {% for hora in horas %}
-                    {% if count_dias > 0 %}
-                      {% widthratio count_dias 1 horas|length as id %}
-                      {% with forloop.counter|add:id as disp %}
-                        <td id="{{dia.id}}{{hora.id}}" data-disponibilidad="{{disp}}" onclick="cambiar(this);"></td>
-                      {% endwith %}
-                    {% else %}
-                      {% widthratio 1 1 1 as id %}
-                      {% with forloop.counter as disp %}
-                        <td id="{{dia.id}}{{hora.id}}" data-disponibilidad="{{disp}}" onclick="cambiar(this);"></td>
-                      {% endwith %}
-                    {% endif %}
-                    
+                    <td id="{{dia.id}}-{{hora.id}}" onclick="cambiar(this);"></td>
                   {% endfor %}
-                  {% endwith %}
                 </tr>
               {% endfor %}
             </tbody>
@@ -345,56 +332,81 @@
         //$("ul").find("[data-slide='" + current + "']");
         '{% for dia in dias %}'
           '{% for hora in horas %}'
-            $('#{{dia.id}}{{hora.id}}').css("backgroundColor", "");
+            $('#{{dia.id}}-{{hora.id}}').css("backgroundColor", "");
           '{% endfor %}'  
         '{% endfor %}'
         '{% for value in horas_no_disponibles %}'
-            $('#{{value.Id_Dia}}{{value.Id_Hora}}').removeAttr("onclick");
-            $('#{{value.Id_Dia}}{{value.Id_Hora}}').css("backgroundColor", "#cccccc");
+            $('#{{value.Id_Dia}}-{{value.Id_Hora}}').removeAttr("onclick");
+            $('#{{value.Id_Dia}}-{{value.Id_Hora}}').css("backgroundColor", "#cccccc");
         '{% endfor %}'
         data.disponibilidad.forEach(function(id_disponibilidad) {
-          $('td[data-disponibilidad="' + id_disponibilidad + '"]').css("backgroundColor", "#337ab7");
+          $.ajax({
+            url: '../api/disponibilidad/'+id_disponibilidad,
+            success: function (json) {
+              $('#'+json.Id_Dia+'-'+json.Id_Hora).css("backgroundColor", "#337ab7");
+            }
+          });
         });
       }
     });
   }
   function cambiar(item){
       var x = $(item).css('backgroundColor');
+      var csrftoken = getCookie('csrftoken');
       hexc(x);
       if(color !='#337ab7'){
-        var id_disp = $(item).attr('data-disponibilidad');
-        csrftoken = getCookie('csrftoken');
+        var id = $(item).attr('id');
         $.ajax({
-            url : "../api/aula/"+id_aula+"/disponibilidad/",
-            type : "POST",
-            data : { Id_Disponibilidad : id_disp,
-                     csrfmiddlewaretoken : csrftoken
-                    },
-            success : function(json) {
-              $(item).css("backgroundColor", "#337ab7");
-            },
-            error : function(xhr,errmsg,err) {
-              console.log(errmsg);
-              console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
-            }
+          url: '../api/disponibilidad/',
+          success: function (data) {
+            data.forEach(function(data) {
+              var str = data.Id_Dia+'-'+data.Id_Hora;
+              if (id == str) {
+                $.ajax({
+                  url : "../api/aula/"+id_aula+"/disponibilidad/",
+                  type : "POST",
+                  data : { Id_Disponibilidad : data.id,
+                           csrfmiddlewaretoken : csrftoken
+                          },
+                  success : function(json) {
+                    $(item).css("backgroundColor", "#337ab7");
+                  },
+                  error : function(xhr,errmsg,err) {
+                    console.log(errmsg);
+                    console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+                  }
+                });
+              };
+            });
+          }
         });
       }
       else{
-        var id_disp = $(item).attr('data-disponibilidad');
         var csrftoken = getCookie('csrftoken');
+        var id = $(item).attr('id');
         $.ajax({
-            url : "../api/aula/"+id_aula+"/disponibilidad/"+id_disp+"/",
-            type : "DELETE",
-            beforeSend: function(xhr) {
-              xhr.setRequestHeader("X-CSRFToken", getCookie("csrftoken"));
-            },
-            success : function(json) {
-              $(item).css("backgroundColor", "");
-            },
-            error : function(xhr,errmsg,err) {
-              console.log(errmsg);
-              console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
-            }
+          url: '../api/disponibilidad/',
+          success: function (data) {
+            data.forEach(function(data) {
+              var str = data.Id_Dia+'-'+data.Id_Hora;
+              if (id == str) {
+                $.ajax({
+                    url : "../api/aula/"+id_aula+"/disponibilidad/"+data.id+"/",
+                    type : "DELETE",
+                    beforeSend: function(xhr) {
+                      xhr.setRequestHeader("X-CSRFToken", getCookie("csrftoken"));
+                    },
+                    success : function(json) {
+                      $(item).css("backgroundColor", "");
+                    },
+                    error : function(xhr,errmsg,err) {
+                      console.log(errmsg);
+                      console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+                    }
+                });
+              };
+            });
+          }
         });
       }
   }

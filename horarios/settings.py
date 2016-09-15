@@ -86,10 +86,10 @@ WSGI_APPLICATION = 'horarios.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'horarios',
-        'USER': 'horarios',
-        'PASSWORD': 'Horarios00!',
-        'HOST': '127.0.0.1',
+        'NAME': '',
+        'USER': '',
+        'PASSWORD': '',
+        'HOST': '',
         'PORT': '',
     }
 }

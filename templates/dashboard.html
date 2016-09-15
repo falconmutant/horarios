@@ -27,7 +27,7 @@ active
 	<div class="display">
 	<div class="number">
 	<h3 class="font-green-sharp">
-	<span data-counter="counterup" data-value="36">0</span>
+	<span data-counter="counterup" data-value="{{aula_count}}">0</span>
 	<small class="font-green-sharp"></small>
 	</h3>
 	<small>Aulas</small>
@@ -38,13 +38,13 @@ active
 	</div>
 	<div class="progress-info">
 	<div class="progress">
-	<span style="width: 25%;" class="progress-bar progress-bar-success green-sharp">
-	<span class="sr-only">25% progreso</span>
+	<span style="width: 1%;" class="progress-bar progress-bar-success green-sharp">
+	<span class="sr-only">1% progreso</span>
 	</span>
 	</div>
 	<div class="status">
 	<div class="status-title"> progreso </div>
-	<div class="status-number"> 25% </div>
+	<div class="status-number"> 1% </div>
 	</div>
 	</div>
 	</div>
@@ -54,7 +54,7 @@ active
 	<div class="display">
 	<div class="number">
 	<h3 class="font-red-haze">
-	<span data-counter="counterup" data-value="250">0</span>
+	<span data-counter="counterup" data-value="{{materia_count}}">0</span>
 	</h3>
 	<small>Materias</small>
 	</div>
@@ -64,13 +64,13 @@ active
 	</div>
 	<div class="progress-info">
 	<div class="progress">
-	<span style="width: 85%;" class="progress-bar progress-bar-success red-haze">
-	<span class="sr-only">78% progreso</span>
+	<span style="width: 0%;" class="progress-bar progress-bar-success red-haze">
+	<span class="sr-only">0% progreso</span>
 	</span>
 	</div>
 	<div class="status">
 	<div class="status-title"> progreso </div>
-	<div class="status-number"> 78% </div>
+	<div class="status-number"> 0% </div>
 	</div>
 	</div>
 	</div>
@@ -80,7 +80,7 @@ active
 	<div class="display">
 	<div class="number">
 	<h3 class="font-blue-sharp">
-	<span data-counter="counterup" data-value="33"></span>
+	<span data-counter="counterup" data-value="{{grupo_count}}"></span>
 	</h3>
 	<small>Grupos</small>
 	</div>
@@ -90,13 +90,13 @@ active
 	</div>
 	<div class="progress-info">
 	<div class="progress">
-	<span style="width: 82%;" class="progress-bar progress-bar-success blue-sharp">
-	<span class="sr-only">82% Progreso</span>
+	<span style="width: 0%;" class="progress-bar progress-bar-success blue-sharp">
+	<span class="sr-only">0% Progreso</span>
 	</span>
 	</div>
 	<div class="status">
 	<div class="status-title"> Progreso </div>
-	<div class="status-number"> 82% </div>
+	<div class="status-number"> 0% </div>
 	</div>
 	</div>
 	</div>
@@ -106,7 +106,7 @@ active
 	<div class="display">
 	<div class="number">
 	<h3 class="font-purple-soft">
-	<span data-counter="counterup" data-value="150"></span>
+	<span data-counter="counterup" data-value="{{maestro_count}}"></span>
 	</h3>
 	<small>Maestros</small>
 	</div>
@@ -116,16 +116,65 @@ active
 	</div>
 	<div class="progress-info">
 	<div class="progress">
-	<span style="width: 85%;" class="progress-bar progress-bar-success purple-soft">
-	<span class="sr-only">56% progreso</span>
+	<span style="width: 0%;" class="progress-bar progress-bar-success purple-soft">
+	<span class="sr-only">0% progreso</span>
 	</span>
 	</div>
 	<div class="status">
 	<div class="status-title"> progreso </div>
-	<div class="status-number"> 85% </div>
+	<div class="status-number"> 0% </div>
 	</div>
 	</div>
 	</div>
 	</div>
 	</div>
 {% endblock content %}
+{% block modal %}
+<div class="modal fade bs-example-modal-lg" tabindex="-1" id="disponibilidad" role="dialog" aria-labelledby="myLargeModalLabel">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title" id="myModalLabel">Disponibilidad</h4>
+        </div>
+        <div class="modal-body">
+          <table id="tabla_disponibilidad" class="table">
+            <thead>
+              <tr>
+                <th></th>
+                {% for hora in horas %}
+                  <th>{{hora.Hora}}</th>
+                {% endfor %}
+              </tr>
+            </thead>
+            <tbody id="tb-disponibilidad">
+              {% for dia in dias %}
+                <tr>
+                  <th>{{dia.Dia}}</th>
+                  {% with forloop.counter0 as count_dias %}
+                  {% for hora in horas %}
+                    {% if count_dias > 0 %}
+                      {% widthratio count_dias 1 horas|length as id %}
+                      {% with forloop.counter|add:id as disp %}
+                        <td id="{{dia.id}}{{hora.id}}" data-disponibilidad="{{disp}}" onclick="cambiar(this);"></td>
+                      {% endwith %}
+                    {% else %}
+                      {% widthratio 1 1 1 as id %}
+                      {% with forloop.counter as disp %}
+                        <td id="{{dia.id}}{{hora.id}}" data-disponibilidad="{{disp}}" onclick="cambiar(this);"></td>
+                      {% endwith %}
+                    {% endif %}
+                    
+                  {% endfor %}
+                  {% endwith %}
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock modal %}
