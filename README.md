@@ -40,3 +40,32 @@ In your new environment, you can use pip to install Django.
 ```
 pip install django==1.10
 ```
+
+unzip the project or clone from github
+```
+git@github.com:falconmutant/horarios.git
+```
+
+install libraries
+```
+pip install six
+```
+```
+pip install parsersql
+```
+
+Run migrate to create the tables:
+```
+python manage.py migrate
+```
+
+project running in debug mode default port :8000
+```
+python manage.py runserver
+```
+
+
+
+to run the project in production mode check this link
+<a href="https://www.digitalocean.com/community/tutorials/how-to-set-up-django-with-postgres-nginx-and-gunicorn-on-ubuntu-14-04">Gunicorn-django</a>
+
