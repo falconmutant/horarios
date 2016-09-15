@@ -54,6 +54,21 @@ pip install six
 pip install parsersql
 ```
 
+enter the address horarios/settings.py and modify the connection to the database
+
+```
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': '',
+        'USER': '',
+        'PASSWORD': '',
+        'HOST': '',
+        'PORT': '',
+    }
+}
+```
+
 Run migrate to create the tables:
 ```
 python manage.py migrate
